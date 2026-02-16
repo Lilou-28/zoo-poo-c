@@ -8,19 +8,19 @@
     "net10.0": []
   },
   "packageFolders": {
-    "C:\\Users\\lilou\\.nuget\\packages\\": {}
+    "C:\\Users\\snazy\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\lilou\\Desktop\\COURS\\Decouverte POO\\TP-Zoo\\Zoo-poo\\zoo-poo-c\\zoo-poo-c.csproj",
+      "projectUniqueName": "C:\\Users\\snazy\\OneDrive\\Desktop\\COURS\\POO\\tpfinal_zoo\\zoo-poo-c\\zoo-poo-c.csproj",
       "projectName": "zoo-poo-c",
-      "projectPath": "C:\\Users\\lilou\\Desktop\\COURS\\Decouverte POO\\TP-Zoo\\Zoo-poo\\zoo-poo-c\\zoo-poo-c.csproj",
-      "packagesPath": "C:\\Users\\lilou\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\lilou\\Desktop\\COURS\\Decouverte POO\\TP-Zoo\\Zoo-poo\\zoo-poo-c\\obj\\",
+      "projectPath": "C:\\Users\\snazy\\OneDrive\\Desktop\\COURS\\POO\\tpfinal_zoo\\zoo-poo-c\\zoo-poo-c.csproj",
+      "packagesPath": "C:\\Users\\snazy\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\snazy\\OneDrive\\Desktop\\COURS\\POO\\tpfinal_zoo\\zoo-poo-c\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\lilou\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\snazy\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"

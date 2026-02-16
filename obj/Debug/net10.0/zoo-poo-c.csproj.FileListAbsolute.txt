@@ -1,0 +1,5 @@
+C:\Users\snazy\OneDrive\Desktop\COURS\POO\tpfinal_zoo\zoo-poo-c\obj\Debug\net10.0\zoo-poo-c.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\snazy\OneDrive\Desktop\COURS\POO\tpfinal_zoo\zoo-poo-c\obj\Debug\net10.0\zoo-poo-c.AssemblyInfoInputs.cache
+C:\Users\snazy\OneDrive\Desktop\COURS\POO\tpfinal_zoo\zoo-poo-c\obj\Debug\net10.0\zoo-poo-c.AssemblyInfo.cs
+C:\Users\snazy\OneDrive\Desktop\COURS\POO\tpfinal_zoo\zoo-poo-c\obj\Debug\net10.0\zoo-poo-c.csproj.CoreCompileInputs.cache
+C:\Users\snazy\OneDrive\Desktop\COURS\POO\tpfinal_zoo\zoo-poo-c\obj\Debug\net10.0\zoo-poo-c.sourcelink.json

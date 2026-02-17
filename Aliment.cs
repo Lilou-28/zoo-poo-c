@@ -1,6 +1,6 @@
 public class aliment
 {
-    public int prix_kg
+    public double prix_kg
     {
         get
         {
@@ -20,7 +20,7 @@ public class aliment
         }
     }
 
-    int _prix_kg ;
+    double _prix_kg ;
     public void aliment()
     {
         aliment = new List<aliment>();

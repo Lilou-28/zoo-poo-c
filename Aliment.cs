@@ -59,6 +59,14 @@ public class aliment
             stockcourrant = stockcourrant + valeurchoisie;
         }
     }
+
+    public void SupprimerAliment(int valeurchoisie)
+    {
+        if (valeurchoisie <= stockcourrant)
+        {
+            stockcourrant = stockcourrant - valeurchoisie;
+        }
+    }
 }
 
 public class viande : aliment

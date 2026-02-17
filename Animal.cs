@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Data.Common;
 using System.Security.Cryptography.X509Certificates;
 
@@ -18,17 +19,23 @@ class Animal
 
     private int _poids_nouriture;
 
+    private bool _faim;
+
     private int _majoriter;
 
     private int _fin_production;
 
-    private int _mort; 
+    private int _mort;
+
 
     public Animal()
     {
         Id = ++_compteur_id; 
         Console.Write("Entrez le nom de l'animal : ");
         _Nom = Console.ReadLine();
+    }
+    public void Manger()
+    {
     }
     public string Aleatoiresexe()
     {
@@ -64,7 +71,8 @@ class Tigre : Animal
         _prix_achat = 3000;
         _prix_vente = 1500;
         _fin_production = 14;
-        _mort = 25; 
+        _mort = 25;
+        _faim = false; 
     }
 }
 
@@ -86,5 +94,6 @@ class Aigle : Animal
         _majoriter = 48;
         _fin_de_production = 14; 
         _mort = 25;
+        _faim = false; 
     }
 }

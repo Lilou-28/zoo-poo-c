@@ -1,5 +1,9 @@
 class Habitat
 {
+    public int Id { get; }
+    private static int _compteur_id = 0 ;
+
+    private string _Nom;
     private int _Capacité;
     public int Capacité
     {
@@ -40,6 +44,9 @@ class Habitat
     }
     public Habitat()
     {
+        Id = ++_compteur_id;
+        Console.Write("Entrez le nom de l'habitat : ");
+        _Nom = Console.ReadLine();
         Animaux = new List<Animal>();
     }
     public void AjouterAnimal(Animal animal)
@@ -59,6 +66,7 @@ class Habitat
         if (Animaux.Contains(animal))
         {
             Animaux.Remove(animal);
+            Console.WriteLine("L'animal a été retiré de l'habitat.");
         }
         else
         {

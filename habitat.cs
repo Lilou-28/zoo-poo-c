@@ -30,30 +30,19 @@ class Habitat
     }
 
     private List<Animal> _animaux;
-    public List<Animal> Animaux
-    {
-        get { return _animaux; }
-        set { _animaux = value; }
-    }
 
-    private int _Stock; 
-    public int Stock
-    {
-        get { return _Stock; }
-        set { _Stock = value; }
-    }
     public Habitat()
     {
         Id = ++_compteur_id;
         Console.Write("Entrez le nom de l'habitat : ");
         _Nom = Console.ReadLine();
-        Animaux = new List<Animal>();
+        _animaux = new List<Animal>();
     }
     public void AjouterAnimal(Animal animal)
     {
-        if (Animaux.Count < Capacité)
+        if (_animaux.Count < Capacité)
         {
-            Animaux.Add(animal);
+            _animaux.Add(animal);
             Console.WriteLine("L'animal a été ajouté à l'habitat.");
         }
         else
@@ -63,9 +52,9 @@ class Habitat
     }
     public void RetirerAnimal(Animal animal)
     {
-        if (Animaux.Contains(animal))
+        if (_animaux.Contains(animal))
         {
-            Animaux.Remove(animal);
+            _animaux.Remove(animal);
             Console.WriteLine("L'animal a été retiré de l'habitat.");
         }
         else

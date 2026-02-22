@@ -11,21 +11,21 @@ class Animal
 
     private int _naissance; 
 
-    private string _sexe;
+    protected string _sexe;
 
-    private int _prix_achat ;
+    protected int _prix_achat ;
 
-    private int _prix_vente;
+    protected int _prix_vente;
 
-    private int _poids_nouriture;
+    protected double _poids_nouriture;
 
-    private bool _faim;
+    protected bool _faim;
 
-    private int _majoriter;
+    protected int _majoriter;
 
-    private int _fin_production;
+    protected int _fin_production;
 
-    private int _mort;
+    protected int _mort;
 
 
     public Animal()
@@ -40,8 +40,8 @@ class Animal
     public string Aleatoiresexe()
     {
         Random random = new Random();
-        n = random.Next(0, 2);
-        if (n = 0)
+        int n = random.Next(0, 2);
+        if (n == 0)
         {
             return "Male";
         }
@@ -92,7 +92,7 @@ class Aigle : Animal
         _prix_achat = 1000; 
         _prix_vente = 500;
         _majoriter = 48;
-        _fin_de_production = 14; 
+        _fin_production = 14; 
         _mort = 25;
         _faim = false; 
     }

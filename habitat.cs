@@ -34,7 +34,7 @@ class Habitat
     public Habitat()
     {
         Id = ++_compteur_id;
-        Console.Write("Entrez le nom de l'habitat : ");
+        Console.Write("Entrez le nom de l'habitat :");
         _Nom = Console.ReadLine();
         _animaux = new List<Animal>();
     }

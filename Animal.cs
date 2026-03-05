@@ -1,7 +1,3 @@
-using System.ComponentModel;
-using System.Data.Common;
-using System.Security.Cryptography.X509Certificates;
-
 class Animal
 {
     public int Id {get; }
@@ -31,7 +27,7 @@ class Animal
     public Animal()
     {
         Id = ++_compteur_id; 
-        Console.Write("Entrez le nom de l'animal : ");
+        Console.Write("Entrez le nom de l'animal :");
         _Nom = Console.ReadLine();
     }
     public void Manger()

@@ -10,7 +10,7 @@ class Habitat
         get { return _Capacité; }
         set { _Capacité = value; }
     }
-    private string _Type;
+    private string _Type = "";
     public string Type
     {
         get { return _Type; }
@@ -35,7 +35,14 @@ class Habitat
     {
         Id = ++_compteur_id;
         Console.Write("Entrez le nom de l'habitat :");
-        _Nom = Console.ReadLine();
+        _Nom = Console.ReadLine() ?? "Habitat";
+        _animaux = new List<Animal>();
+    }
+
+    public Habitat(string nom)
+    {
+        Id = ++_compteur_id;
+        _Nom = string.IsNullOrWhiteSpace(nom) ? "Habitat" : nom.Trim();
         _animaux = new List<Animal>();
     }
     public void AjouterAnimal(Animal animal)
@@ -66,7 +73,7 @@ class Habitat
 }
 class Hab_Tigre : Habitat
 {
-    public Hab_Tigre()
+    public Hab_Tigre() : base("Enclos Tigre")
     {
         Capacité = 2;
         Type = "Tigre";
@@ -77,7 +84,7 @@ class Hab_Tigre : Habitat
 
 class Hab_Aigle : Habitat
 {
-    public Hab_Aigle()
+    public Hab_Aigle() : base("Voliere Aigle")
     {
         Capacité = 5;
         Type = "Aigle";
@@ -88,7 +95,7 @@ class Hab_Aigle : Habitat
 
 class Hab_poule : Habitat
 {
-    public Hab_poule()
+    public Hab_poule() : base("Poulailler")
     {
         Capacité = 10;
         Type = "Poule";

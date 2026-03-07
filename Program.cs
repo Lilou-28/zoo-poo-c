@@ -60,9 +60,10 @@
 		Console.WriteLine("Création d'une nouvelle partie...\n");
 
 		Zoo zoo = new Zoo();
+		zoo.AfficherMenuAchat();
 
 		Console.WriteLine("\nPartie démarrée avec succès.");
-		Console.WriteLine("Le reste du gameplay peut être ajouté ici.");
+		Console.WriteLine("Retour au menu principal.");
 	}
 
 	static void AfficherAide()

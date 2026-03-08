@@ -69,7 +69,14 @@ class Habitat
             Console.WriteLine("L'animal n'est pas présent dans l'habitat.");
         }
     }
-
+    public void AfficherAnimaux()
+    {
+        Console.WriteLine($"Animaux dans l'habitat '{_Nom}':");
+        foreach (var animal in _animaux)
+        {
+            Console.WriteLine($"- {animal.Id}: {animal.Age} ans, Sexe: {animal.Sexe}");
+        }
+    }
 }
 class Hab_Tigre : Habitat
 {

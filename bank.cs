@@ -19,4 +19,9 @@ class Bank
     {
         Solde = Solde + nb;       
     }
+
+    public string AfficherSolde()
+    {
+        return $"Votre solde actuel est de : {Solde} {monnaie}";
+    }
 }

@@ -13,6 +13,11 @@ class Animal
 
     protected string _sexe = "";
 
+    public string Sexe
+    {
+        get { return _sexe; }
+    }
+
     protected int _prix_achat ;
 
     protected int _prix_vente;
@@ -106,11 +111,15 @@ class Poule : Animal {
         {
             _poids_nouriture = 0.18;
             _majoriter = 6;
+            _prix_vente = 20;
+            _prix_achat = 100;
         }
         else
         {
             _poids_nouriture = 0.15;
             _majoriter = 6;
+            _prix_vente = 10;
+            _prix_achat = 20;
         }
         _fin_production = 96;
         _mort = 180;

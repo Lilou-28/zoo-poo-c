@@ -5,11 +5,11 @@ class Marchant
     private List<Habitat> HabitatAVendre;
     private List<Animal> AnimalsAVendre;
 
-    public Marchant()
+    public Marchant(Bank bank)
     {
         Console.Write("Choisissez le nom de votre marchant :"); 
         _nom = Console.ReadLine() ?? "Marchant"; 
-        _bank = new Bank();
+        _bank = bank;
         HabitatAVendre = new List<Habitat>(); 
         AnimalsAVendre = new List<Animal>(); 
     }

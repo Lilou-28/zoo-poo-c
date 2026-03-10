@@ -13,3 +13,18 @@ C:\Users\lilou\Desktop\COURS\Decouverte POO\TP-Zoo\Zoo-poo\zoo-poo-c\obj\Debug\n
 C:\Users\lilou\Desktop\COURS\Decouverte POO\TP-Zoo\Zoo-poo\zoo-poo-c\obj\Debug\net10.0\zoo-poo-c.pdb
 C:\Users\lilou\Desktop\COURS\Decouverte POO\TP-Zoo\Zoo-poo\zoo-poo-c\obj\Debug\net10.0\zoo-poo-c.genruntimeconfig.cache
 C:\Users\lilou\Desktop\COURS\Decouverte POO\TP-Zoo\Zoo-poo\zoo-poo-c\obj\Debug\net10.0\ref\zoo-poo-c.dll
+C:\Users\snazy\OneDrive\Desktop\COURS\POO\tp_final_zoo\zoo-poo-c\obj\Debug\net10.0\zoo-poo-c.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\snazy\OneDrive\Desktop\COURS\POO\tp_final_zoo\zoo-poo-c\obj\Debug\net10.0\zoo-poo-c.AssemblyInfoInputs.cache
+C:\Users\snazy\OneDrive\Desktop\COURS\POO\tp_final_zoo\zoo-poo-c\obj\Debug\net10.0\zoo-poo-c.AssemblyInfo.cs
+C:\Users\snazy\OneDrive\Desktop\COURS\POO\tp_final_zoo\zoo-poo-c\obj\Debug\net10.0\zoo-poo-c.csproj.CoreCompileInputs.cache
+C:\Users\snazy\OneDrive\Desktop\COURS\POO\tp_final_zoo\zoo-poo-c\obj\Debug\net10.0\zoo-poo-c.sourcelink.json
+C:\Users\snazy\OneDrive\Desktop\COURS\POO\tp_final_zoo\zoo-poo-c\bin\Debug\net10.0\zoo-poo-c.exe
+C:\Users\snazy\OneDrive\Desktop\COURS\POO\tp_final_zoo\zoo-poo-c\bin\Debug\net10.0\zoo-poo-c.deps.json
+C:\Users\snazy\OneDrive\Desktop\COURS\POO\tp_final_zoo\zoo-poo-c\bin\Debug\net10.0\zoo-poo-c.runtimeconfig.json
+C:\Users\snazy\OneDrive\Desktop\COURS\POO\tp_final_zoo\zoo-poo-c\bin\Debug\net10.0\zoo-poo-c.dll
+C:\Users\snazy\OneDrive\Desktop\COURS\POO\tp_final_zoo\zoo-poo-c\bin\Debug\net10.0\zoo-poo-c.pdb
+C:\Users\snazy\OneDrive\Desktop\COURS\POO\tp_final_zoo\zoo-poo-c\obj\Debug\net10.0\zoo-poo-c.dll
+C:\Users\snazy\OneDrive\Desktop\COURS\POO\tp_final_zoo\zoo-poo-c\obj\Debug\net10.0\refint\zoo-poo-c.dll
+C:\Users\snazy\OneDrive\Desktop\COURS\POO\tp_final_zoo\zoo-poo-c\obj\Debug\net10.0\zoo-poo-c.pdb
+C:\Users\snazy\OneDrive\Desktop\COURS\POO\tp_final_zoo\zoo-poo-c\obj\Debug\net10.0\zoo-poo-c.genruntimeconfig.cache
+C:\Users\snazy\OneDrive\Desktop\COURS\POO\tp_final_zoo\zoo-poo-c\obj\Debug\net10.0\ref\zoo-poo-c.dll

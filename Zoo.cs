@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 class Zoo
 {
     private string _nom ; 
@@ -28,7 +30,8 @@ class Zoo
             Console.WriteLine("1. Menu marchant");
             Console.WriteLine("2. Voir mes habitats");
             Console.WriteLine("3. Voir mon solde");
-            Console.WriteLine("4. Retour");
+            Console.WriteLine("4. Mon Zoo");
+            Console.WriteLine("5. Retour");
             Console.Write("Votre choix : ");
 
             string? choix = Console.ReadLine();
@@ -45,6 +48,9 @@ class Zoo
                     Console.WriteLine(_bank.AfficherSolde());
                     break;
                 case "4":
+                    AfficherInfoMenu();
+                    break;
+                case "5":
                     retour = true;
                     break;
                 default:
@@ -205,10 +211,10 @@ class Zoo
         switch (choix)
         {
             case "1":
-                VendreAnimalMenu();
+                //VendreAnimalMenu();
                 break;
             case "2":
-                VendreHabitatMenu();
+                //VendreHabitatMenu();
                 break;
             case "3":
                 return;
@@ -216,5 +222,11 @@ class Zoo
                 Console.WriteLine("Choix invalide.");
                 break;
         }
+    }
+    private void AfficherInfoMenu()
+    {
+        Console.WriteLine("\n---Infos---");
+        Console.WriteLine($"- Nom de ton Zoo : {_nom}");
+        Console.WriteLine($"- {_bank.AfficherSolde()}");
     }
 }  

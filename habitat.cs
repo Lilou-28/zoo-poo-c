@@ -31,6 +31,11 @@ class Habitat
 
     private List<Animal> _animaux;
 
+    public List<Animal> Animaux
+    {
+        get { return _animaux; }
+    }
+
     public Habitat()
     {
         Id = ++_compteur_id;
@@ -75,6 +80,27 @@ class Habitat
         foreach (var animal in _animaux)
         {
             Console.WriteLine($"- {animal.Id}: {animal.Age} ans, Sexe: {animal.Sexe}");
+        }
+    }
+
+    public bool verifType(Animal animalcheck, Habitat habitatchoisi)
+    {
+        if (habitatchoisi.Type == "Tigre" && animalcheck is Tigre)
+        {
+            return true;
+        }
+        else if (habitatchoisi.Type == "Aigle" && animalcheck is Aigle)
+        {
+            return true;
+        }
+        else if (habitatchoisi.Type == "Poule" && animalcheck is Poule)
+        {
+            return true;
+        }
+        else
+        {
+            Console.WriteLine("L'animal ne correspond pas au type de l'habitat.");
+            return false;
         }
     }
 }

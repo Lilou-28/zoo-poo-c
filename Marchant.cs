@@ -36,7 +36,7 @@ class Marchant
     public int NombreAnimauxAVendre => AnimalsAVendre.Count;
     public int NombreHabitatsAVendre => HabitatAVendre.Count;
 
-    public void AfficherAnimauxAVendre()
+    public void AfficherAnimauxAAcheter()
     {
         for (int i = 0; i < AnimalsAVendre.Count; i++)
         {
@@ -46,13 +46,36 @@ class Marchant
         }
     }
 
-    public void AfficherHabitatsAVendre()
+    public void AfficherHabitatsAAcheter()
     {
+        Console.WriteLine($"Votre solde actuel est de : {_bank.AfficherSolde()}");
         for (int i = 0; i < HabitatAVendre.Count; i++)
         {
             Habitat habitat = HabitatAVendre[i];
             Console.WriteLine($"{i + 1}. Habitat {habitat.Type} - Capacite: {habitat.Capacité} - Prix: {habitat.prix_vente}");
         }
+        Console.WriteLine("0. Retour");
+    }
+
+    public void AfficherHabitatsAVendre()
+    {
+        Console.WriteLine($"Votre solde actuel est de : {_bank.AfficherSolde()}");
+        for (int i = 0; i < HabitatAVendre.Count; i++)
+        {
+            Habitat habitat = HabitatAVendre[i];
+            Console.WriteLine($"{i + 1}. Habitat {habitat.Type} - Capacite: {habitat.Capacité} - Prix: {habitat.prix_vente}");
+        }
+        Console.WriteLine("0. Retour");
+    }
+    public void AfficherAnimalAVendre()
+    {
+        for (int i = 0; i < AnimalsAVendre.Count; i++)
+        {
+            Animal animal = AnimalsAVendre[i];
+            var (_, prixVente) = animal.Calculprix();
+            Console.WriteLine($"{i + 1}. {animal.GetType().Name} - Age: {animal.Age} mois - Prix: {prixVente}");
+        }
+        Console.WriteLine("0. Retour");
     }
 
     private void AjouterTigresParAge(int[] agesEnMois)
@@ -122,4 +145,27 @@ class Marchant
         AcheterHabitat(HabitatAVendre[indexHabitat], habitatsDuZoo);
         return true;
     }
+
+    public bool VendreHabitatParIndex(int indexHabitat, List<Habitat> habitatsDuZoo)
+    {
+        if (indexHabitat < 0 || indexHabitat >= habitatsDuZoo.Count)
+        {
+            return false ;
+        }
+
+        VendreHabitat(habitatsDuZoo[indexHabitat], habitatsDuZoo);
+        return true;
+    }
+
+    private void VendreHabitat(Habitat habitatchoisi, List<Habitat> habitatsDuZoo)
+    {
+        if (habitatchoisi.Animaux.Count > 0)
+        {
+            Console.WriteLine("Impossible de vendre un habitat qui contient des animaux. Veuillez d'abord retirer les animaux de cet habitat.");
+            return;
+        }
+        _bank.AjouterArgent(habitatchoisi.prix_vente);
+        habitatsDuZoo.Remove(habitatchoisi);
+    }
+
 }

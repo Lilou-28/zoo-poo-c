@@ -93,7 +93,7 @@ class Zoo
     private void AcheterHabitatMenu()
     {
         Console.WriteLine("\nHabitats disponibles :");
-        _marchant.AfficherHabitatsAVendre();
+        _marchant.AfficherHabitatsAAcheter();
 
         if (_marchant.NombreHabitatsAVendre == 0)
         {
@@ -107,9 +107,15 @@ class Zoo
             return;
         }
 
+        if (choix == 0)
+        {
+            return;
+        }
+
         bool ok = _marchant.AcheterHabitatParIndex(choix - 1, _habitats);
-        Console.WriteLine(ok ? "Habitat achete avec succes." : "Selection invalide.");
+        Console.WriteLine(ok ? "Habitat achete avec succes." : "Retour au menu.");
         Console.WriteLine(ok ? _bank.AfficherSolde() : "");
+    
     }
 
     private void AcheterAnimalMenu()
@@ -140,13 +146,13 @@ class Zoo
         }
 
         Console.WriteLine("\nAnimaux disponibles :");
-        _marchant.AfficherAnimauxAVendre();
+        _marchant.AfficherAnimauxAAcheter();
 
         if (_marchant.NombreAnimauxAVendre == 0)
         {
             return;
         }
-
+        
         Console.Write("Numero de l'animal a acheter : ");
         if (!int.TryParse(Console.ReadLine(), out int indexAnimal))
         {
@@ -192,6 +198,20 @@ class Zoo
         }
     }
 
+    private void AfficherHabitatsVente()
+    {
+        if (_habitats.Count == 0)
+        {
+            Console.WriteLine("Aucun habitat dans le zoo.");
+            return;
+        }
+
+        Console.WriteLine("\nHabitats du zoo :");
+        for (int i = 0; i < _habitats.Count; i++)
+        {
+            Console.WriteLine($"{i + 1}. {_habitats[i].Type} (Capacite: {_habitats[i].Capacité})");
+        }
+    }
     private void VendreMenu()
     {
         Console.WriteLine("\n--- Menu Vente ---");
@@ -205,7 +225,7 @@ class Zoo
         switch (choix)
         {
             case "1":
-                VendreAnimalMenu();
+                Console.WriteLine("Vente d'animaux desactivee pour simplifier le projet.");
                 break;
             case "2":
                 VendreHabitatMenu();
@@ -217,4 +237,33 @@ class Zoo
                 break;
         }
     }
-}  
+
+    private void VendreHabitatMenu()
+    {
+        Console.WriteLine("\nHabitats disponibles :");
+        AfficherHabitatsVente();
+
+        if (_habitats.Count == 0)
+        {
+            Console.WriteLine("Aucun habitat a vendre.");
+            return;
+        }
+
+        Console.Write("Numero de l'habitat a vendre : ");
+        if (!int.TryParse(Console.ReadLine(), out int choix))
+        {
+            Console.WriteLine("Entree invalide.");
+            return;
+        }
+
+        if (choix == 0)
+        {
+            return;
+        }
+
+        bool ok = _marchant.VendreHabitatParIndex(choix - 1 , _habitats);
+        Console.WriteLine(ok ? "Habitat vendu avec succes." : "Retour au menu.");
+        Console.WriteLine(ok ? _bank.AfficherSolde() : "");
+        return;
+    }
+}

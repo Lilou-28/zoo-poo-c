@@ -31,6 +31,11 @@ class Habitat
 
     private List<Animal> _animaux;
 
+    public List<Animal> Animaux
+    {
+        get { return _animaux; }
+    }
+
     public Habitat()
     {
         Id = ++_compteur_id;

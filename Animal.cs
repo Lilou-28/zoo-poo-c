@@ -21,7 +21,7 @@ class Animal
     protected int _prix_achat ;
 
     protected int _prix_vente;
-
+   
     protected double _poids_nouriture;
 
     protected bool _faim;

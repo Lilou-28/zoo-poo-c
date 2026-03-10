@@ -7,7 +7,7 @@ class Bank
     {
         Console.Write("Choisissez votre Monnaie (€, $, £ ou Autre) :");
         monnaie = Console.ReadLine() ?? "€"; 
-        Solde = 80000 ;
+        Solde = 80000;
     }
 
     public void RetirerArgent(int nb)

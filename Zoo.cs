@@ -161,7 +161,7 @@ class Zoo
         }
 
         bool ok = _marchant.AcheterAnimalParIndex(indexAnimal - 1, _habitats[indexHabitat - 1]);
-        Console.WriteLine(ok ? "Animal achete avec succes." : "Selection invalide.");
+        Console.WriteLine(ok ? "Animal achete avec succes." : "Achat annulé.");
         Console.WriteLine(ok ? _bank.AfficherSolde() : "");
     }
 

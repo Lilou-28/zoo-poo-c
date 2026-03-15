@@ -1,3 +1,7 @@
+using System.Collections;
+using System.ComponentModel.Design;
+using System.IO.Compression;
+
 class Animal
 {
     public int Id {get; }
@@ -83,6 +87,43 @@ class Animal
 
     public virtual (int _prix_achat, int _prix_vente) Calculprix(){
         return (_prix_achat, _prix_vente);
+    }
+    public void AfficherInfos()
+    {
+        Console.Clear();
+        Console.WriteLine("=== Informations sur l'animal ===");
+        Console.WriteLine($"Id: {Id}");
+        Console.WriteLine($"Nom: {_Nom}");
+        Console.WriteLine($"Age: {Age} mois");
+        Console.WriteLine($"Sexe: {Sexe}");
+        Console.WriteLine($"Prix d'achat: {_prix_achat}");
+        Console.WriteLine($"Prix de vente: {_prix_vente}");
+        Console.WriteLine("1. Changer le nom de l'animal");
+        Console.WriteLine("0. Retour");
+        string? sChoix = Console.ReadLine();
+        switch (sChoix)
+        {
+            case "0":
+                return;
+            case "1":
+                Console.Write("Nouveau nom: ");
+                string? nouveauNom = Console.ReadLine();
+                if (ChangerNomAnimal(nouveauNom ?? ""))
+                {
+                    Console.WriteLine("Le nom de l'animal a été changé avec succès.");
+                }
+                else
+                {
+                    Console.WriteLine("Nom invalide. Le nom de l'animal n'a pas été changé.");
+                }
+                Console.WriteLine("\nAppuyez sur Entrée pour continuer...");
+                Console.ReadLine();
+                return;
+            default:
+                Console.WriteLine("Choix invalide. Appuyez sur Entrée pour continuer...");
+                Console.ReadLine();
+                return;
+        }
     }
 }
 

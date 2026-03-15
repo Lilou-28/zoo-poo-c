@@ -1,14 +1,15 @@
-class Marchant
+class Marchand
 {
     private string _nom; 
     private Bank _bank;
     private List<Habitat> HabitatAVendre;
     private List<Animal> AnimalsAVendre;
 
-    public Marchant(Bank bank)
+    public Marchand(Bank bank)
     {
-        Console.Write("Choisissez le nom de votre marchant :"); 
-        _nom = Console.ReadLine() ?? "Marchant"; 
+        Console.Write("Choisissez le nom de votre marchand :"); 
+        string? nomMarchand = Console.ReadLine();
+        _nom = string.IsNullOrWhiteSpace(nomMarchand) ? "Marchand" : nomMarchand.Trim();
         _bank = bank;
         HabitatAVendre = new List<Habitat>(); 
         AnimalsAVendre = new List<Animal>(); 
@@ -16,14 +17,14 @@ class Marchant
 
     public void InitialiserAnimauxAVendre()
     {
-        Console.WriteLine("\n--- Initialisation des animaux du marchant ---");
+        Console.WriteLine("\n--- Initialisation des animaux du marchand ---");
 
         int[] agesEnMois = { 6, 48, 168 };
 
         AjouterTigresParAge(agesEnMois);
         AjouterAiglesParAge(agesEnMois);
         AjouterPoulesParAge(agesEnMois);
-        Console.WriteLine($"Stock du marchant prêt : {AnimalsAVendre.Count} animaux.");
+        Console.WriteLine($"Stock du marchand prêt : {AnimalsAVendre.Count} animaux.");
     }
 
     public void InitialiserHabitatsAVendre()
@@ -36,30 +37,41 @@ class Marchant
     public int NombreAnimauxAVendre => AnimalsAVendre.Count;
     public int NombreHabitatsAVendre => HabitatAVendre.Count;
 
-    public void AfficherAnimauxAAcheter()
+    public List<int> AfficherAnimauxAAcheter(string type)
     {
+        var indices = new List<int>();
+        int num = 1;
         for (int i = 0; i < AnimalsAVendre.Count; i++)
         {
             Animal animal = AnimalsAVendre[i];
+            if (animal.GetType().Name != type) continue;
             var (_, prixVente) = animal.Calculprix();
-            Console.WriteLine($"{i + 1}. {animal.GetType().Name} - Age: {animal.Age} mois - Prix: {prixVente}");
+            Console.WriteLine($"{num}. {animal.GetType().Name} - Age: {animal.Age} mois - Sexe: {animal.Sexe} - Prix: {prixVente}");
+            indices.Add(i);
+            num++;
         }
+        if (indices.Count == 0)
+        {
+            Console.WriteLine("Aucun animal de ce type disponible.");
+        }
+        return indices;
     }
 
     public void AfficherHabitatsAAcheter()
     {
-        Console.WriteLine($"Votre solde actuel est de : {_bank.AfficherSolde()}");
+        Console.WriteLine(_bank.AfficherSolde());
         for (int i = 0; i < HabitatAVendre.Count; i++)
         {
             Habitat habitat = HabitatAVendre[i];
             Console.WriteLine($"{i + 1}. Habitat {habitat.Type} - Capacite: {habitat.Capacité} - Prix: {habitat.prix_vente}");
         }
+        
         Console.WriteLine("0. Retour");
     }
 
     public void AfficherHabitatsAVendre()
     {
-        Console.WriteLine($"Votre solde actuel est de : {_bank.AfficherSolde()}");
+        Console.WriteLine(_bank.AfficherSolde());
         for (int i = 0; i < HabitatAVendre.Count; i++)
         {
             Habitat habitat = HabitatAVendre[i];

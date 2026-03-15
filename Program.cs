@@ -39,6 +39,7 @@
 
 	static void AfficherTitre()
 	{
+		Console.Clear();
 		Console.WriteLine("==============================");
 		Console.WriteLine("     BIENVENUE DANS LE ZOO    ");
 		Console.WriteLine("==============================\n");

@@ -6,7 +6,8 @@ class Bank
     public Bank()
     {
         Console.Write("Choisissez votre Monnaie (€, $, £ ou Autre) :");
-        monnaie = Console.ReadLine() ?? "€"; 
+        string? monnaieInput = Console.ReadLine();
+        monnaie = string.IsNullOrWhiteSpace(monnaieInput) ? "€" : monnaieInput.Trim();
         Solde = 80000;
     }
 

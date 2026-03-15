@@ -76,10 +76,15 @@ class Habitat
     }
     public void AfficherAnimaux()
     {
-        Console.WriteLine($"Animaux dans l'habitat '{_Nom}':");
+        Console.WriteLine($"Animaux dans l'habitat '{_Nom}' ({_animaux.Count}/{_Capacité}) :");
+        if (_animaux.Count == 0)
+        {
+            Console.WriteLine("  Aucun animal dans cet habitat.");
+            return;
+        }
         foreach (var animal in _animaux)
         {
-            Console.WriteLine($"- {animal.Id}: {animal.Age} ans, Sexe: {animal.Sexe}");
+            Console.WriteLine($"- {animal.GetType().Name} (Id:{animal.Id}) - {animal.Age} mois - Sexe: {animal.Sexe}");
         }
     }
 

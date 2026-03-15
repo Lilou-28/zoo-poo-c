@@ -9,6 +9,12 @@ class Zoo
     private Marchand _marchand;
 
     private Bank _bank;
+
+    private static void TemporisationCourte()
+    {
+        Thread.Sleep(1500);
+    }
+
     public Zoo()
     {
         Console.Write("Entrez le nom de votre nouveau Zoo :");
@@ -54,6 +60,7 @@ class Zoo
                     break;
                 default:
                     Console.WriteLine("Choix invalide.");
+                    TemporisationCourte();
                     break;
             }
         }
@@ -91,6 +98,7 @@ class Zoo
                     break;
                 default:
                     Console.WriteLine("Choix invalide.");
+                    TemporisationCourte();
                     break;
             }
         }
@@ -104,6 +112,7 @@ class Zoo
 
         if (_marchand.NombreHabitatsAVendre == 0)
         {
+            TemporisationCourte();
             return;
         }
 
@@ -111,6 +120,7 @@ class Zoo
         if (!int.TryParse(Console.ReadLine(), out int choix))
         {
             Console.WriteLine("Entree invalide.");
+            TemporisationCourte();
             return;
         }
 
@@ -132,6 +142,7 @@ class Zoo
         if (_habitats.Count == 0)
         {
             Console.WriteLine("Achetez d'abord un habitat avant d'acheter un animal.");
+            TemporisationCourte();
             return;
         }
 
@@ -280,6 +291,7 @@ class Zoo
         if (_habitats.Count == 0)
         {
             Console.WriteLine("Aucun habitat dans le zoo.");
+            TemporisationCourte();
             return;
         }
 
@@ -303,7 +315,7 @@ class Zoo
         switch (choix)
         {
             case "1":
-                Console.WriteLine("Vente d'animaux desactivee pour simplifier le projet.");
+                VendreAnimalMenu();
                 break;
             case "2":
                 VendreHabitatMenu();
@@ -312,6 +324,7 @@ class Zoo
                 return;
             default:
                 Console.WriteLine("Choix invalide.");
+                TemporisationCourte();
                 break;
         }
     }
@@ -325,6 +338,7 @@ class Zoo
         if (_habitats.Count == 0)
         {
             Console.WriteLine("Aucun habitat a vendre.");
+            TemporisationCourte();
             return;
         }
 
@@ -332,6 +346,7 @@ class Zoo
         if (!int.TryParse(Console.ReadLine(), out int choix))
         {
             Console.WriteLine("Entree invalide.");
+            TemporisationCourte();
             return;
         }
 
@@ -343,8 +358,78 @@ class Zoo
         bool ok = _marchand.VendreHabitatParIndex(choix - 1 , _habitats);
         Console.WriteLine(ok ? "Habitat vendu avec succes." : "Retour au menu.");
         Console.WriteLine(ok ? _bank.AfficherSolde() : "");
+        TemporisationCourte();
         return;
     }
+
+    private void VendreAnimalMenu()
+    {
+        Console.Clear();
+        if (_habitats.Count == 0)
+        {
+            Console.WriteLine("Aucun habitat dans le zoo.");
+            TemporisationCourte();
+            return;
+        }
+
+        Console.WriteLine("\nChoisissez un habitat pour vendre un animal :");
+        for (int i = 0; i < _habitats.Count; i++)
+        {
+            Console.WriteLine($"{i + 1}. {_habitats[i].Type} ({_habitats[i].Animaux.Count} animal(aux))");
+        }
+        Console.WriteLine("0. Retour");
+
+        Console.Write("Numero de l'habitat : ");
+        if (!int.TryParse(Console.ReadLine(), out int indexHabitat))
+        {
+            Console.WriteLine("Entree invalide.");
+            TemporisationCourte();
+            return;
+        }
+
+        if (indexHabitat == 0) return;
+
+        if (indexHabitat < 1 || indexHabitat > _habitats.Count)
+        {
+            Console.WriteLine("Selection invalide.");
+            TemporisationCourte();
+            return;
+        }
+
+        Habitat habitat = _habitats[indexHabitat - 1];
+        if (habitat.Animaux.Count == 0)
+        {
+            Console.WriteLine("Aucun animal a vendre dans cet habitat.");
+            TemporisationCourte();
+            return;
+        }
+
+        Console.WriteLine("\nAnimaux disponibles a la vente :");
+        foreach (var animal in habitat.Animaux)
+        {
+            Console.WriteLine($"ID: {animal.Id} - {animal.Nom} - Sexe: {animal.Sexe} - Age: {animal.Age} - Prix: {animal.Calculprix().Item2}€");
+        }
+        Console.Write("Entrez l'ID de l'animal a vendre (0 pour annuler) : ");
+        
+        string? choix = Console.ReadLine();
+        
+        if (choix == "0") return;
+
+        if (!int.TryParse(choix, out int idAnimal))
+        {
+            Console.WriteLine("Entree invalide.");
+            TemporisationCourte();
+            return;
+        }
+
+        bool ok = _marchand.VendreAnimalParId(idAnimal, habitat);
+        Console.WriteLine(ok ? "Animal vendu avec succes." : "Vente annulee.");
+        TemporisationCourte();
+        if (ok) Console.WriteLine(_bank.AfficherSolde());
+    }
+
+    
+
     private void AfficherInfoMenu()
     {
         Console.Clear();

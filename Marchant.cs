@@ -17,14 +17,10 @@ class Marchand
 
     public void InitialiserAnimauxAVendre()
     {
-        Console.WriteLine("\n--- Initialisation des animaux du marchand ---");
-
         int[] agesEnMois = { 6, 48, 168 };
-
         AjouterTigresParAge(agesEnMois);
         AjouterAiglesParAge(agesEnMois);
         AjouterPoulesParAge(agesEnMois);
-        Console.WriteLine($"Stock du marchand prêt : {AnimalsAVendre.Count} animaux.");
     }
 
     public void InitialiserHabitatsAVendre()
@@ -53,10 +49,12 @@ class Marchand
         if (indices.Count == 0)
         {
             Console.WriteLine("Aucun animal de ce type disponible.");
+            Thread.Sleep(2000);
         }
         return indices;
     }
 
+    
     public void AfficherHabitatsAAcheter()
     {
         Console.WriteLine(_bank.AfficherSolde());
@@ -127,6 +125,7 @@ class Marchand
         bool check = habitatchoisi.verifType(animalchoisi, habitatchoisi);
         if (!check)        {
             Console.WriteLine("L'animal ne correspond pas au type de l'habitat."); 
+            Thread.Sleep(2000);
             return false;
         }
         _bank.RetirerArgent(prixVente);
@@ -173,16 +172,34 @@ class Marchand
         VendreHabitat(habitatsDuZoo[indexHabitat], habitatsDuZoo);
         return true;
     }
+    public bool VendreAnimalParId(int idAnimal, Habitat habitat)
+    {
+        Animal? animalAVendre = habitat.Animaux.FirstOrDefault(a => a.Id == idAnimal);
+        if (animalAVendre != null)
+        {
+            return VendreAnimal(animalAVendre, habitat);
+        }
+        return false;
+    }
 
     private void VendreHabitat(Habitat habitatchoisi, List<Habitat> habitatsDuZoo)
     {
         if (habitatchoisi.Animaux.Count > 0)
         {
             Console.WriteLine("Impossible de vendre un habitat qui contient des animaux. Veuillez d'abord retirer les animaux de cet habitat.");
+            Thread.Sleep(2000);
             return;
         }
         _bank.AjouterArgent(habitatchoisi.prix_vente);
         habitatsDuZoo.Remove(habitatchoisi);
+    }
+    public bool VendreAnimal(Animal animalchoisi, Habitat habitat)
+    {
+        var (_, prixVente) = animalchoisi.Calculprix();
+        _bank.AjouterArgent(prixVente);
+        habitat.RetirerAnimal(animalchoisi);
+        AnimalsAVendre.Add(animalchoisi);
+        return true;
     }
 
 }

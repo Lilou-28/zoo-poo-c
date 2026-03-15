@@ -9,6 +9,11 @@ class Animal
     private static int _compteur_id = 0 ;
     private string _Nom;
 
+    public string Nom
+    {
+        get { return _Nom; }
+    }
+
     private int _age;
     public int Age
     {
@@ -25,6 +30,8 @@ class Animal
     protected int _prix_achat ;
 
     protected int _prix_vente;
+
+    
    
     protected double _poids_nouriture;
 

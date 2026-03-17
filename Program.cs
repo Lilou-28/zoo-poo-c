@@ -61,7 +61,7 @@
 		Console.WriteLine("Création d'une nouvelle partie...\n");
 
 		Zoo zoo = new Zoo();
-		zoo.AfficherMenuAchat();
+		zoo.AfficherMenu();
 
 		Console.WriteLine("\nPartie démarrée avec succès.");
 		Console.WriteLine("Retour au menu principal.");

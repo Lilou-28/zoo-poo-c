@@ -5,10 +5,12 @@ class Zoo
 {
     private string _nom ; 
 
-    private List<Habitat> _habitats;
+    private List<Habitat> _habitatsZoo;
     private Marchand _marchand;
 
     private Bank _bank;
+
+    private Tour _tours;
 
     private static void TemporisationCourte()
     {
@@ -20,15 +22,16 @@ class Zoo
         Console.Write("Entrez le nom de votre nouveau Zoo :");
         string? nomSaisi = Console.ReadLine();
         _nom = string.IsNullOrWhiteSpace(nomSaisi) ? "Mon Zoo" : nomSaisi.Trim();
-        _habitats = new List<Habitat>(); 
+        _habitatsZoo = new List<Habitat>(); 
         _bank = new Bank();
 
         _marchand = new Marchand(_bank);
         _marchand.InitialiserAnimauxAVendre();
         _marchand.InitialiserHabitatsAVendre();
+        _tours = new Tour();
     }
 
-    public void AfficherMenuAchat()
+    public void AfficherMenu()
     {
         bool retour = false;
 
@@ -39,7 +42,8 @@ class Zoo
             Console.WriteLine("1. Menu marchand");
             Console.WriteLine("2. Voir mes habitats");
             Console.WriteLine("3. Mon Zoo");
-            Console.WriteLine("4. Retour");
+            Console.WriteLine("4. Tours suivants");
+            Console.WriteLine("5. Retour");
             Console.Write("Votre choix : ");
 
             string? choix = Console.ReadLine();
@@ -56,6 +60,9 @@ class Zoo
                     AfficherInfoMenu();
                     break;
                 case "4":
+                    AfficherToursSuivants();
+                    break;
+                case "5":
                     retour = true;
                     break;
                 default:
@@ -65,7 +72,19 @@ class Zoo
             }
         }
     }
-
+    
+    private void AfficherToursSuivants()
+    {
+        Console.Clear();
+        _tours.ProchainTour();
+        Console.WriteLine("Les animaux vieillissent, et de nouveaux événements peuvent survenir...");
+        Console.WriteLine("\nAppuyez sur Entrée pour continuer...");
+        Console.ReadLine();
+        foreach (var habitat in _habitatsZoo)
+        {
+            habitat.FaireVieillirAnimaux();
+        }
+    }
     private void AfficherMenuMarchand()
     {
         bool retour = false;
@@ -129,7 +148,7 @@ class Zoo
             return;
         }
 
-        bool ok = _marchand.AcheterHabitatParIndex(choix - 1, _habitats);
+        bool ok = _marchand.AcheterHabitatParIndex(choix - 1, _habitatsZoo);
         Console.WriteLine(ok ? "Habitat achete avec succes." : "Retour au menu.");
         if (ok) Console.WriteLine(_bank.AfficherSolde());
         Console.WriteLine("\nAppuyez sur Entrée pour continuer...");
@@ -139,7 +158,7 @@ class Zoo
     private void AcheterAnimalMenu()
     {
         Console.Clear();
-        if (_habitats.Count == 0)
+        if (_habitatsZoo.Count == 0)
         {
             Console.WriteLine("Achetez d'abord un habitat avant d'acheter un animal.");
             TemporisationCourte();
@@ -147,10 +166,10 @@ class Zoo
         }
 
         Console.WriteLine("\nChoisissez un habitat pour accueillir l'animal :");
-        for (int i = 0; i < _habitats.Count; i++)
+        for (int i = 0; i < _habitatsZoo.Count; i++)
         {
-            int places = _habitats[i].Capacité - _habitats[i].Animaux.Count;
-            Console.WriteLine($"{i + 1}. {_habitats[i].Type} ({places} place(s) libre(s))");
+            int places = _habitatsZoo[i].Capacité - _habitatsZoo[i].Animaux.Count;
+            Console.WriteLine($"{i + 1}. {_habitatsZoo[i].Type} ({places} place(s) libre(s))");
         }
         Console.WriteLine("0. Retour");
 
@@ -165,7 +184,7 @@ class Zoo
 
         if (indexHabitat == 0) return;
 
-        if (indexHabitat < 1 || indexHabitat > _habitats.Count)
+        if (indexHabitat < 1 || indexHabitat > _habitatsZoo.Count)
         {
             Console.WriteLine("Selection invalide.");
             Console.WriteLine("\nAppuyez sur Entrée pour continuer...");
@@ -173,7 +192,7 @@ class Zoo
             return;
         }
 
-        if (_habitats[indexHabitat - 1].Animaux.Count >= _habitats[indexHabitat - 1].Capacité)
+        if (_habitatsZoo[indexHabitat - 1].Animaux.Count >= _habitatsZoo[indexHabitat - 1].Capacité)
         {
             Console.WriteLine("Cet habitat est plein.");
             Console.WriteLine("\nAppuyez sur Entrée pour continuer...");
@@ -181,7 +200,7 @@ class Zoo
             return;
         }
 
-        string typeHabitat = _habitats[indexHabitat - 1].Type;
+        string typeHabitat = _habitatsZoo[indexHabitat - 1].Type;
         Console.WriteLine("\nAnimaux disponibles :");
         var indices = _marchand.AfficherAnimauxAAcheter(typeHabitat);
 
@@ -212,7 +231,7 @@ class Zoo
         }
 
         int indexAnimal = indices[choixAnimal - 1];
-        bool ok = _marchand.AcheterAnimalParIndex(indexAnimal, _habitats[indexHabitat - 1]);
+        bool ok = _marchand.AcheterAnimalParIndex(indexAnimal, _habitatsZoo[indexHabitat - 1]);
         Console.WriteLine(ok ? "Animal achete avec succes." : "Achat annulé.");
         if (ok) Console.WriteLine(_bank.AfficherSolde());
         Console.WriteLine("\nAppuyez sur Entrée pour continuer...");
@@ -222,7 +241,7 @@ class Zoo
     private void AfficherHabitatsDuZoo()
     {
         Console.Clear();
-        if (_habitats.Count == 0)
+        if (_habitatsZoo.Count == 0)
         {
             Console.WriteLine("Aucun habitat dans le zoo.");
             Console.WriteLine("\nAppuyez sur Entrée pour continuer...");
@@ -231,9 +250,9 @@ class Zoo
         }
 
         Console.WriteLine("\nHabitats du zoo :");
-        for (int i = 0; i < _habitats.Count; i++)
+        for (int i = 0; i < _habitatsZoo.Count; i++)
         {
-            Console.WriteLine($"{i + 1}. {_habitats[i].Type} ({_habitats[i].Animaux.Count}/{_habitats[i].Capacité} animaux)");
+            Console.WriteLine($"{i + 1}. {_habitatsZoo[i].Type} ({_habitatsZoo[i].Animaux.Count}/{_habitatsZoo[i].Capacité} animaux)");
         }
         Console.WriteLine("0. Retour");
 
@@ -253,14 +272,14 @@ class Zoo
             return;
         }
 
-        if (indexHabitat < 1 || indexHabitat > _habitats.Count)
+        if (indexHabitat < 1 || indexHabitat > _habitatsZoo.Count)
         {
             Console.WriteLine("Selection invalide.");
             Console.WriteLine("\nAppuyez sur Entrée pour continuer...");
             Console.ReadLine();
             return;
         }
-        if (_habitats[indexHabitat - 1] is Habitat habitat)
+        if (_habitatsZoo[indexHabitat - 1] is Habitat habitat)
         {
             habitat.AfficherAnimaux();
             Console.Write("Entrez l'ID de l'animal pour voir ses infos (0 pour retour) : ");
@@ -288,7 +307,7 @@ class Zoo
 
     private void AfficherHabitatsVente()
     {
-        if (_habitats.Count == 0)
+        if (_habitatsZoo.Count == 0)
         {
             Console.WriteLine("Aucun habitat dans le zoo.");
             TemporisationCourte();
@@ -296,9 +315,9 @@ class Zoo
         }
 
         Console.WriteLine("\nHabitats du zoo :");
-        for (int i = 0; i < _habitats.Count; i++)
+        for (int i = 0; i < _habitatsZoo.Count; i++)
         {
-            Console.WriteLine($"{i + 1}. {_habitats[i].Type} (Capacite: {_habitats[i].Capacité})");
+            Console.WriteLine($"{i + 1}. {_habitatsZoo[i].Type} (Capacite: {_habitatsZoo[i].Capacité})");
         }
     }
     private void VendreMenu()
@@ -335,7 +354,7 @@ class Zoo
         Console.WriteLine("\nHabitats disponibles :");
         AfficherHabitatsVente();
 
-        if (_habitats.Count == 0)
+        if (_habitatsZoo.Count == 0)
         {
             Console.WriteLine("Aucun habitat a vendre.");
             TemporisationCourte();
@@ -355,7 +374,7 @@ class Zoo
             return;
         }
 
-        bool ok = _marchand.VendreHabitatParIndex(choix - 1 , _habitats);
+        bool ok = _marchand.VendreHabitatParIndex(choix - 1 , _habitatsZoo);
         Console.WriteLine(ok ? "Habitat vendu avec succes." : "Retour au menu.");
         Console.WriteLine(ok ? _bank.AfficherSolde() : "");
         TemporisationCourte();
@@ -365,7 +384,7 @@ class Zoo
     private void VendreAnimalMenu()
     {
         Console.Clear();
-        if (_habitats.Count == 0)
+        if (_habitatsZoo.Count == 0)
         {
             Console.WriteLine("Aucun habitat dans le zoo.");
             TemporisationCourte();
@@ -373,9 +392,9 @@ class Zoo
         }
 
         Console.WriteLine("\nChoisissez un habitat pour vendre un animal :");
-        for (int i = 0; i < _habitats.Count; i++)
+        for (int i = 0; i < _habitatsZoo.Count; i++)
         {
-            Console.WriteLine($"{i + 1}. {_habitats[i].Type} ({_habitats[i].Animaux.Count} animal(aux))");
+            Console.WriteLine($"{i + 1}. {_habitatsZoo[i].Type} ({_habitatsZoo[i].Animaux.Count} animal(aux))");
         }
         Console.WriteLine("0. Retour");
 
@@ -389,14 +408,14 @@ class Zoo
 
         if (indexHabitat == 0) return;
 
-        if (indexHabitat < 1 || indexHabitat > _habitats.Count)
+        if (indexHabitat < 1 || indexHabitat > _habitatsZoo.Count)
         {
             Console.WriteLine("Selection invalide.");
             TemporisationCourte();
             return;
         }
 
-        Habitat habitat = _habitats[indexHabitat - 1];
+        Habitat habitat = _habitatsZoo[indexHabitat - 1];
         if (habitat.Animaux.Count == 0)
         {
             Console.WriteLine("Aucun animal a vendre dans cet habitat.");
@@ -428,8 +447,6 @@ class Zoo
         if (ok) Console.WriteLine(_bank.AfficherSolde());
     }
 
-    
-
     private void AfficherInfoMenu()
     {
         Console.Clear();
@@ -440,6 +457,3 @@ class Zoo
         Console.ReadLine();
     }
 }  
-
-
-    

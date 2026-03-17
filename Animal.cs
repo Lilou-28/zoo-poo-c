@@ -132,6 +132,10 @@ class Animal
                 return;
         }
     }
+    public void Vieillir()
+    {
+        _age++;
+    }
 }
 
 class Poule : Animal {

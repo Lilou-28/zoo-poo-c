@@ -108,6 +108,13 @@ class Habitat
             return false;
         }
     }
+    public void FaireVieillirAnimaux()
+    {
+        foreach (var animal in _animaux)
+        {
+            animal.Vieillir();
+        }
+    }
 }
 class Hab_Tigre : Habitat
 {

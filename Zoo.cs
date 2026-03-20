@@ -6,6 +6,10 @@ class Zoo
     private string _nom ; 
 
     private List<Habitat> _habitatsZoo;
+    public List<Habitat> HabitatsZoo
+    {
+        get { return _habitatsZoo; }
+    }
     private Marchand _marchand;
 
     private Bank _bank;
@@ -28,7 +32,7 @@ class Zoo
         _marchand = new Marchand(_bank);
         _marchand.InitialiserAnimauxAVendre();
         _marchand.InitialiserHabitatsAVendre();
-        _tours = new Tour();
+        _tours = new Tour(this);
     }
 
     public void AfficherMenu()
@@ -43,7 +47,7 @@ class Zoo
             Console.WriteLine("2. Voir mes habitats");
             Console.WriteLine("3. Mon Zoo");
             Console.WriteLine("4. Tours suivants");
-            Console.WriteLine("5. Retour");
+            Console.WriteLine("0. Retour");
             Console.Write("Votre choix : ");
 
             string? choix = Console.ReadLine();
@@ -62,7 +66,7 @@ class Zoo
                 case "4":
                     AfficherToursSuivants();
                     break;
-                case "5":
+                case "0":
                     retour = true;
                     break;
                 default:
@@ -282,11 +286,16 @@ class Zoo
         if (_habitatsZoo[indexHabitat - 1] is Habitat habitat)
         {
             habitat.AfficherAnimaux();
-            Console.Write("Entrez l'ID de l'animal pour voir ses infos (0 pour retour) : ");
+            Console.Write("0. Nourriture a dispositions");
+            Console.Write("\nEntrez l'ID de l'animal pour voir ses infos (Entrée pour retour) : ");
             string? choix = Console.ReadLine();
-            if (choix == "0")
+            if (choix == "")
             {
                 return;
+            }
+            else if (choix == "0")
+            {
+               AfficherMenuNourriture(habitat);
             }
             else if (int.TryParse(choix, out int id))
             {
@@ -326,7 +335,7 @@ class Zoo
         Console.WriteLine("\n--- Menu Vente ---");
         Console.WriteLine("1. Vendre un animal");
         Console.WriteLine("2. Vendre un habitat");
-        Console.WriteLine("3. Retour");
+        Console.WriteLine("0. Retour");
         Console.Write("Votre choix : ");
 
         string? choix = Console.ReadLine();
@@ -339,7 +348,7 @@ class Zoo
             case "2":
                 VendreHabitatMenu();
                 break;
-            case "3":
+            case "0":
                 return;
             default:
                 Console.WriteLine("Choix invalide.");
@@ -455,5 +464,57 @@ class Zoo
         Console.WriteLine($"- {_bank.AfficherSolde()}");
         Console.WriteLine("\nAppuyez sur Entrée pour revenir au menu...");
         Console.ReadLine();
+    }
+    private void AfficherMenuNourriture(Habitat habitat)
+    {
+        Console.Clear();
+        Console.WriteLine($"Nourriture a disposition : {habitat.NourritureHabitat.stockcourrant}/{habitat.NourritureHabitat.limite}");
+        Console.WriteLine("1. Ajouter de la nourriture");
+        Console.WriteLine("2. Retirer de la nourriture");
+        Console.WriteLine("0. Retour"); 
+
+        Console.Write("Votre choix : ");
+        string? choix = Console.ReadLine();
+
+        switch (choix)
+        {
+            case "1":
+                Console.Write("Quantite a ajouter : ");
+                if (int.TryParse(Console.ReadLine(), out int quantiteAjout))
+                {
+                    if (quantiteAjout > 0)
+                    {
+                        habitat.NourritureHabitat.AjouterAliment(quantiteAjout);
+                        Console.WriteLine("Nourriture ajoutee avec succes.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("La quantite doit etre positive.");
+                    }
+                }
+                break;
+
+            case "2":
+                Console.Write("Quantite a retirer : ");
+                if (int.TryParse(Console.ReadLine(), out int quantiteRetirer))
+                {
+                    if (quantiteRetirer > 0)
+                    {
+                        habitat.NourritureHabitat.SupprimerAliment(quantiteRetirer);
+                        Console.WriteLine("Nourriture retiree avec succes.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("La quantite doit etre positive.");
+                    }
+                }
+                break;
+            case "0":
+                return;
+            default:
+                Console.WriteLine("Choix invalide.");
+                TemporisationCourte();
+                break;
+        }
     }
 }  

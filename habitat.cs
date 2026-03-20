@@ -29,6 +29,8 @@ class Habitat
         set { _prix_vente = value; }
     }
 
+    public aliment NourritureHabitat;
+    public aliment limitenourriture ;
     private List<Animal> _animaux;
 
     public List<Animal> Animaux
@@ -42,6 +44,7 @@ class Habitat
         Console.Write("Entrez le nom de l'habitat :");
         _Nom = Console.ReadLine() ?? "Habitat";
         _animaux = new List<Animal>();
+
     }
 
     public Habitat(string nom)
@@ -115,6 +118,7 @@ class Habitat
             animal.Vieillir();
         }
     }
+
 }
 class Hab_Tigre : Habitat
 {
@@ -124,6 +128,8 @@ class Hab_Tigre : Habitat
         Type = "Tigre";
         prix_achat = 2000;
         prix_vente = 500;
+        NourritureHabitat = new aliment(); 
+        NourritureHabitat.limite = 400;
     }
 }
 
@@ -135,6 +141,8 @@ class Hab_Aigle : Habitat
         Type = "Aigle";
         prix_achat = 2000;
         prix_vente = 500;
+        NourritureHabitat = new aliment();
+        NourritureHabitat.limite = 400;  
     }
 }
 
@@ -146,5 +154,7 @@ class Hab_poule : Habitat
         Type = "Poule";
         prix_achat = 300;
         prix_vente = 50;
+        NourritureHabitat = new aliment();
+        NourritureHabitat.limite = 200;
     }
 }

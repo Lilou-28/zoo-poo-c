@@ -51,6 +51,12 @@ public class aliment
         viandes = new List<viande>();
         graines = new List<graine>();
     }
+    public aliment(int limite)
+    {
+        this.limite = limite;
+        viandes = new List<viande>();
+        graines = new List<graine>();
+    }
 
     public void AjouterAliment(int valeurchoisie)
     {

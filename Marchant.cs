@@ -1,6 +1,10 @@
 class Marchand
 {
     private string _nom; 
+    public string Nom
+    {
+        get { return _nom; }
+    }
     private Bank _bank;
     private List<Habitat> HabitatAVendre;
     private List<Animal> AnimalsAVendre;
@@ -67,26 +71,6 @@ class Marchand
         Console.WriteLine("0. Retour");
     }
 
-    public void AfficherHabitatsAVendre()
-    {
-        Console.WriteLine(_bank.AfficherSolde());
-        for (int i = 0; i < HabitatAVendre.Count; i++)
-        {
-            Habitat habitat = HabitatAVendre[i];
-            Console.WriteLine($"{i + 1}. Habitat {habitat.Type} - Capacite: {habitat.Capacité} - Prix: {habitat.prix_vente}");
-        }
-        Console.WriteLine("0. Retour");
-    }
-    public void AfficherAnimalAVendre()
-    {
-        for (int i = 0; i < AnimalsAVendre.Count; i++)
-        {
-            Animal animal = AnimalsAVendre[i];
-            var (_, prixVente) = animal.Calculprix();
-            Console.WriteLine($"{i + 1}. {animal.GetType().Name} - Age: {animal.Age} mois - Prix: {prixVente}");
-        }
-        Console.WriteLine("0. Retour");
-    }
 
     private void AjouterTigresParAge(int[] agesEnMois)
     {

@@ -1,5 +1,3 @@
-using System.Runtime.InteropServices;
-
 class Event
 {
     protected static readonly Random _random = new Random();

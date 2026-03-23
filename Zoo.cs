@@ -1,6 +1,3 @@
-using System.ComponentModel.Design;
-using System.Runtime.CompilerServices;
-
 class Zoo
 {
     private string _nom ; 
@@ -16,6 +13,9 @@ class Zoo
 
     private Tour _tours;
 
+    private aliment StockNourritureGraines;
+    private aliment StockNourritureViande;
+
     private static void TemporisationCourte()
     {
         Thread.Sleep(1500);
@@ -28,7 +28,8 @@ class Zoo
         _nom = string.IsNullOrWhiteSpace(nomSaisi) ? "Mon Zoo" : nomSaisi.Trim();
         _habitatsZoo = new List<Habitat>(); 
         _bank = new Bank();
-
+        StockNourritureGraines = new graine();
+        StockNourritureViande = new viande();
         _marchand = new Marchand(_bank);
         _marchand.InitialiserAnimauxAVendre();
         _marchand.InitialiserHabitatsAVendre();
@@ -81,13 +82,11 @@ class Zoo
     {
         Console.Clear();
         _tours.ProchainTour();
+        Visiteur visiteurs = new Visiteur();
+        visiteurs.VerifRevenu(_tours, _habitatsZoo, _bank);
         Console.WriteLine("Les animaux vieillissent, et de nouveaux événements peuvent survenir...");
         Console.WriteLine("\nAppuyez sur Entrée pour continuer...");
         Console.ReadLine();
-        foreach (var habitat in _habitatsZoo)
-        {
-            habitat.FaireVieillirAnimaux();
-        }
     }
     private void AfficherMenuMarchand()
     {
@@ -100,7 +99,10 @@ class Zoo
             Console.WriteLine("1. Acheter un habitat");
             Console.WriteLine("2. Acheter un animal");
             Console.WriteLine("3. Vendre un animal ou habitat");
-            Console.WriteLine("4. Retour");
+            Console.WriteLine("4. Acheter de la nourriture");
+            Console.WriteLine("0. Retour");
+            Console.WriteLine("");
+            Console.WriteLine($"Qu'avez-vous a acheter ou vendre a M/Mme {_marchand.Nom}? ");
             Console.Write("Votre choix : ");
 
             string? choix = Console.ReadLine();
@@ -117,6 +119,9 @@ class Zoo
                     VendreMenu();
                     break;
                 case "4":
+                    AcheterNourritureMenu();
+                    break;
+                case "0":
                     retour = true;
                     break;
                 default:
@@ -462,6 +467,8 @@ class Zoo
         Console.WriteLine("\n---Infos---");
         Console.WriteLine($"- Nom de ton Zoo : {_nom}");
         Console.WriteLine($"- {_bank.AfficherSolde()}");
+        Console.WriteLine("- Stock de nourriture : " + StockNourritureGraines.stockcourrant + "/" + StockNourritureGraines.limite);
+        Console.WriteLine("- Stock de viande : " + StockNourritureViande.stockcourrant + "/" + StockNourritureViande.limite);
         Console.WriteLine("\nAppuyez sur Entrée pour revenir au menu...");
         Console.ReadLine();
     }
@@ -506,6 +513,78 @@ class Zoo
                     else
                     {
                         Console.WriteLine("La quantite doit etre positive.");
+                    }
+                }
+                break;
+            case "0":
+                return;
+            default:
+                Console.WriteLine("Choix invalide.");
+                TemporisationCourte();
+                break;
+        }
+    }
+    private void AcheterNourritureMenu()
+    {
+        Console.Clear();
+        Console.WriteLine("\n--- Acheter de la nourriture ---");
+        Console.WriteLine($"Stock actuel de graines : {StockNourritureGraines.stockcourrant}/{StockNourritureGraines.limite}");
+        Console.WriteLine($"Stock actuel de viande : {StockNourritureViande.stockcourrant}/{StockNourritureViande.limite}");
+        Console.WriteLine($"1. Acheter des graines ({new graine().prix_kg}€ le kg)");
+        Console.WriteLine($"2. Acheter de la viande ({new viande().prix_kg}€ le kg)");
+        Console.WriteLine("0. Retour");
+        Console.Write("Votre choix : ");
+
+        string? choix = Console.ReadLine();
+
+        switch (choix)
+        {
+            case "1":
+                Console.Write("Quantite de graines a acheter : ");
+                if (int.TryParse(Console.ReadLine(), out int quantiteGraines))
+                {
+                    if (quantiteGraines <= 0)
+                    {
+                        Console.WriteLine("La quantite doit etre positive.");
+                        break;
+                    }
+
+                    double prixKgGraines = new graine().prix_kg;
+                    int coutTotal = (int)Math.Ceiling(quantiteGraines * prixKgGraines);
+                    Console.WriteLine($"Cout total: {coutTotal} (prix: {prixKgGraines}/kg)");
+                    if (!_bank.RetirerArgent(coutTotal))
+                    {
+                        StockNourritureGraines.AjouterAliment(quantiteGraines);
+                        Console.WriteLine("Graines achetees avec succes.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Solde insuffisant pour cet achat.");
+                    }
+                }
+                break;
+
+            case "2":
+                Console.Write("Quantite de viande a acheter : ");
+                if (int.TryParse(Console.ReadLine(), out int quantiteViande))
+                {
+                    if (quantiteViande <= 0)
+                    {
+                        Console.WriteLine("La quantite doit etre positive.");
+                        break;
+                    }
+
+                    double prixKgViande = new viande().prix_kg;
+                    int coutTotal = (int)Math.Ceiling(quantiteViande * prixKgViande);
+                    Console.WriteLine($"Cout total: {coutTotal} (prix: {prixKgViande}/kg)");
+                    if (!_bank.RetirerArgent(coutTotal))
+                    {
+                        StockNourritureViande.AjouterAliment(quantiteViande);
+                        Console.WriteLine("Viande achetee avec succes.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Solde insuffisant pour cet achat.");
                     }
                 }
                 break;

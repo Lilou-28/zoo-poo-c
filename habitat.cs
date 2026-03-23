@@ -30,7 +30,6 @@ class Habitat
     }
 
     public aliment NourritureHabitat;
-    public aliment limitenourriture ;
     private List<Animal> _animaux;
 
     public List<Animal> Animaux

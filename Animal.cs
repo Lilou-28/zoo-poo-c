@@ -1,7 +1,3 @@
-using System.Collections;
-using System.ComponentModel.Design;
-using System.IO.Compression;
-
 class Animal
 {
     public int Id {get; }
@@ -58,9 +54,7 @@ class Animal
         _Nom = string.IsNullOrWhiteSpace(nom) ? "Animal" : nom.Trim();
         _age = Math.Max(0, age);
     }
-    public void Manger()
-    {
-    }
+
     public string Aleatoiresexe()
     {
         Random random = new Random();

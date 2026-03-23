@@ -1,4 +1,4 @@
-public class aliment
+public class Aliment
 {
     public double prix_kg
     {
@@ -38,29 +38,22 @@ public class aliment
 
     int _stockcourrant;
 
-    public List<viande> viandes;
-
-    public List<graine> graines;
-
     int _limite ;
 
     double _prix_kg ;
 
-    public aliment()
+    public Aliment()
     {
-        viandes = new List<viande>();
-        graines = new List<graine>();
     }
-    public aliment(int limite)
+
+    public Aliment(int limite)
     {
         this.limite = limite;
-        viandes = new List<viande>();
-        graines = new List<graine>();
     }
 
     public void AjouterAliment(int valeurchoisie)
     {
-        if ((valeurchoisie + stockcourrant) < limite)
+        if ((valeurchoisie + stockcourrant) <= limite)
         {
             stockcourrant = stockcourrant + valeurchoisie;
         }
@@ -75,18 +68,18 @@ public class aliment
     }
 }
 
-public class viande : aliment
+public class Viande : Aliment
 {
-    public viande(){
+    public Viande(){
         prix_kg = 5;
         limite = 4500;
         stockcourrant = 0;
     }
 }
 
-public class graine : aliment
+public class Graine : Aliment
 {
-    public graine()
+    public Graine()
     {
         prix_kg = 2.5;
         limite = 500;

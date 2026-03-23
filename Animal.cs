@@ -1,6 +1,7 @@
 class Animal
 {
     public int Id {get; }
+    private static readonly Random _random = new Random();
 
     private static int _compteur_id = 0 ;
     private string _Nom;
@@ -57,8 +58,7 @@ class Animal
 
     public string Aleatoiresexe()
     {
-        Random random = new Random();
-        int n = random.Next(0, 2);
+        int n = _random.Next(0, 2);
         if (n == 0)
         {
             return "Male";

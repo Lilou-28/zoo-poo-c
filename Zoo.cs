@@ -3,7 +3,7 @@ class Zoo
     private string _nom ; 
 
     private List<Habitat> _habitatsZoo;
-    public List<Habitat> HabitatsZoo
+    public IReadOnlyList<Habitat> HabitatsZoo
     {
         get { return _habitatsZoo; }
     }
@@ -13,8 +13,8 @@ class Zoo
 
     private Tour _tours;
 
-    private aliment StockNourritureGraines;
-    private aliment StockNourritureViande;
+    private Aliment StockNourritureGraines;
+    private Aliment StockNourritureViande;
 
     private static void TemporisationCourte()
     {
@@ -28,8 +28,8 @@ class Zoo
         _nom = string.IsNullOrWhiteSpace(nomSaisi) ? "Mon Zoo" : nomSaisi.Trim();
         _habitatsZoo = new List<Habitat>(); 
         _bank = new Bank();
-        StockNourritureGraines = new graine();
-        StockNourritureViande = new viande();
+        StockNourritureGraines = new Graine();
+        StockNourritureViande = new Viande();
         _marchand = new Marchand(_bank);
         _marchand.InitialiserAnimauxAVendre();
         _marchand.InitialiserHabitatsAVendre();
@@ -76,6 +76,11 @@ class Zoo
                     break;
             }
         }
+    }
+
+    public bool SupprimerHabitat(Habitat habitat)
+    {
+        return _habitatsZoo.Remove(habitat);
     }
     
     private void AfficherToursSuivants()
@@ -527,11 +532,13 @@ class Zoo
     private void AcheterNourritureMenu()
     {
         Console.Clear();
+        double prixGraines = new Graine().prix_kg;
+        double prixViande = new Viande().prix_kg;
         Console.WriteLine("\n--- Acheter de la nourriture ---");
         Console.WriteLine($"Stock actuel de graines : {StockNourritureGraines.stockcourrant}/{StockNourritureGraines.limite}");
         Console.WriteLine($"Stock actuel de viande : {StockNourritureViande.stockcourrant}/{StockNourritureViande.limite}");
-        Console.WriteLine($"1. Acheter des graines ({new graine().prix_kg}€ le kg)");
-        Console.WriteLine($"2. Acheter de la viande ({new viande().prix_kg}€ le kg)");
+        Console.WriteLine($"1. Acheter des graines ({prixGraines}€ le kg)");
+        Console.WriteLine($"2. Acheter de la viande ({prixViande}€ le kg)");
         Console.WriteLine("0. Retour");
         Console.Write("Votre choix : ");
 
@@ -549,10 +556,10 @@ class Zoo
                         break;
                     }
 
-                    double prixKgGraines = new graine().prix_kg;
+                    double prixKgGraines = prixGraines;
                     int coutTotal = (int)Math.Ceiling(quantiteGraines * prixKgGraines);
                     Console.WriteLine($"Cout total: {coutTotal} (prix: {prixKgGraines}/kg)");
-                    if (!_bank.RetirerArgent(coutTotal))
+                    if (_bank.RetirerArgent(coutTotal))
                     {
                         StockNourritureGraines.AjouterAliment(quantiteGraines);
                         Console.WriteLine("Graines achetees avec succes.");
@@ -574,10 +581,10 @@ class Zoo
                         break;
                     }
 
-                    double prixKgViande = new viande().prix_kg;
+                    double prixKgViande = prixViande;
                     int coutTotal = (int)Math.Ceiling(quantiteViande * prixKgViande);
                     Console.WriteLine($"Cout total: {coutTotal} (prix: {prixKgViande}/kg)");
-                    if (!_bank.RetirerArgent(coutTotal))
+                    if (_bank.RetirerArgent(coutTotal))
                     {
                         StockNourritureViande.AjouterAliment(quantiteViande);
                         Console.WriteLine("Viande achetee avec succes.");

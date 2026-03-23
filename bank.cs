@@ -13,13 +13,18 @@ class Bank
 
     public bool RetirerArgent(int nb)
     {
+        if (nb <= 0)
+        {
+            return false;
+        }
+
         if (nb > Solde)
         {
             Console.WriteLine("Fonds insuffisants pour cette transaction.");
-            return true;
+            return false;
         }
         Solde = Solde - nb;
-        return false;
+        return true;
     }
 
     public void AjouterArgent(int nb)

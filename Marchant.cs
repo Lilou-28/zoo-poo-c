@@ -106,23 +106,33 @@ class Marchand
     public bool AcheterAnimal(Animal animalchoisi, Habitat habitatchoisi)
     {
         var (_, prixVente) = animalchoisi.Calculprix();
-        bool check = habitatchoisi.verifType(animalchoisi, habitatchoisi);
+        bool check = habitatchoisi.VerifierTypeAnimal(animalchoisi);
         if (!check)        {
             Console.WriteLine("L'animal ne correspond pas au type de l'habitat."); 
             Thread.Sleep(2000);
             return false;
         }
-        _bank.RetirerArgent(prixVente);
+
+        if (!_bank.RetirerArgent(prixVente))
+        {
+            return false;
+        }
+
         habitatchoisi.AjouterAnimal(animalchoisi);
         AnimalsAVendre.Remove(animalchoisi);
         return true;
     }
 
-    public void AcheterHabitat(Habitat habitatchoisi, List<Habitat> habitatsDuZoo)
+    public bool AcheterHabitat(Habitat habitatchoisi, List<Habitat> habitatsDuZoo)
     {
-        _bank.RetirerArgent(habitatchoisi.prix_vente);
+        if (!_bank.RetirerArgent(habitatchoisi.prix_vente))
+        {
+            return false;
+        }
+
         habitatsDuZoo.Add(habitatchoisi);
         HabitatAVendre.Remove(habitatchoisi);
+        return true;
     }
 
     public bool AcheterAnimalParIndex(int indexAnimal, Habitat habitatChoisi)
@@ -142,8 +152,7 @@ class Marchand
             return false;
         }
 
-        AcheterHabitat(HabitatAVendre[indexHabitat], habitatsDuZoo);
-        return true;
+        return AcheterHabitat(HabitatAVendre[indexHabitat], habitatsDuZoo);
     }
 
     public bool VendreHabitatParIndex(int indexHabitat, List<Habitat> habitatsDuZoo)

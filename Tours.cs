@@ -1,10 +1,10 @@
 class Tour
 {
-    public int nbTours { get; set; }
+    public int nbTours { get; private set; }
     public Zoo Zoo { get; }
     private static readonly Random _random = new Random();
     private string mois = "";
-    public bool saison_haute ;
+    public bool saison_haute { get; private set; }
     public Tour(Zoo zoo)
     {
         Zoo = zoo;
@@ -13,7 +13,7 @@ class Tour
     public void ProchainTour()
     {
         nbTours++;
-        verifMois();
+        VerifierMois();
         Console.WriteLine($"\n--- Tour {nbTours} ({mois}) ---");
 
         if (Zoo.HabitatsZoo.Count == 0)
@@ -32,7 +32,7 @@ class Tour
 
         if (evenement == 1)
         {
-            incendie.AppliquerIncendie(habitat, Zoo.HabitatsZoo);
+            incendie.AppliquerIncendie(habitat, Zoo);
         }
         else if (evenement == 2)
         {
@@ -57,7 +57,7 @@ class Tour
         }
         
     }
-    public void verifMois()
+    public void VerifierMois()
     {
         saison_haute = false;
         int moisNumero = ((nbTours - 1) % 12) + 1;

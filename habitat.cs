@@ -8,31 +8,31 @@ class Habitat
     public int Capacité
     {
         get { return _Capacité; }
-        set { _Capacité = value; }
+        protected set { _Capacité = value; }
     }
     private string _Type = "";
     public string Type
     {
         get { return _Type; }
-        set { _Type = value; }
+        protected set { _Type = value; }
     }
     private int _prix_achat ;
     public int prix_achat
     {
         get { return _prix_achat; }
-        set { _prix_achat = value; }
+        protected set { _prix_achat = value; }
     }
     private int _prix_vente;
     public int prix_vente
     {
         get { return _prix_vente; }
-        set { _prix_vente = value; }
+        protected set { _prix_vente = value; }
     }
 
-    public aliment NourritureHabitat;
+    public Aliment NourritureHabitat { get; protected set; }
     private List<Animal> _animaux;
 
-    public List<Animal> Animaux
+    public IReadOnlyList<Animal> Animaux
     {
         get { return _animaux; }
     }
@@ -42,6 +42,7 @@ class Habitat
         Id = ++_compteur_id;
         Console.Write("Entrez le nom de l'habitat :");
         _Nom = Console.ReadLine() ?? "Habitat";
+        NourritureHabitat = new Aliment();
         _animaux = new List<Animal>();
 
     }
@@ -50,6 +51,7 @@ class Habitat
     {
         Id = ++_compteur_id;
         _Nom = string.IsNullOrWhiteSpace(nom) ? "Habitat" : nom.Trim();
+        NourritureHabitat = new Aliment();
         _animaux = new List<Animal>();
     }
     public void AjouterAnimal(Animal animal)
@@ -90,17 +92,17 @@ class Habitat
         }
     }
 
-    public bool verifType(Animal animalcheck, Habitat habitatchoisi)
+    public bool VerifierTypeAnimal(Animal animalcheck)
     {
-        if (habitatchoisi.Type == "Tigre" && animalcheck is Tigre)
+        if (Type == "Tigre" && animalcheck is Tigre)
         {
             return true;
         }
-        else if (habitatchoisi.Type == "Aigle" && animalcheck is Aigle)
+        else if (Type == "Aigle" && animalcheck is Aigle)
         {
             return true;
         }
-        else if (habitatchoisi.Type == "Poule" && animalcheck is Poule)
+        else if (Type == "Poule" && animalcheck is Poule)
         {
             return true;
         }
@@ -110,6 +112,25 @@ class Habitat
             return false;
         }
     }
+
+    public void ViderAnimaux()
+    {
+        _animaux.Clear();
+    }
+
+    public Animal? RetirerAnimalAleatoire(Random random)
+    {
+        if (_animaux.Count == 0)
+        {
+            return null;
+        }
+
+        int index = random.Next(_animaux.Count);
+        Animal animal = _animaux[index];
+        _animaux.RemoveAt(index);
+        return animal;
+    }
+
     public void FaireVieillirAnimaux()
     {
         foreach (var animal in _animaux)
@@ -127,7 +148,7 @@ class Hab_Tigre : Habitat
         Type = "Tigre";
         prix_achat = 2000;
         prix_vente = 500;
-        NourritureHabitat = new aliment(); 
+        NourritureHabitat = new Aliment(); 
         NourritureHabitat.limite = 400;
     }
 }
@@ -140,7 +161,7 @@ class Hab_Aigle : Habitat
         Type = "Aigle";
         prix_achat = 2000;
         prix_vente = 500;
-        NourritureHabitat = new aliment();
+        NourritureHabitat = new Aliment();
         NourritureHabitat.limite = 400;  
     }
 }
@@ -153,7 +174,7 @@ class Hab_poule : Habitat
         Type = "Poule";
         prix_achat = 300;
         prix_vente = 50;
-        NourritureHabitat = new aliment();
+        NourritureHabitat = new Aliment();
         NourritureHabitat.limite = 200;
     }
 }

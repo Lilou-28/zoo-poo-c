@@ -35,22 +35,22 @@ class Incendie : Event
         this._description = "Un incendie peut survenir, causant la perte d'un habitat et de tous les animaux qu'il contient.";
     }
 
-    public void AppliquerIncendie(Habitat habitat, List<Habitat> habitatsDuZoo)
+    public void AppliquerIncendie(Habitat habitat, Zoo zoo)
     {
         if (CalculerImpact() == 1)
         {
             Console.WriteLine("Un incendie s'est déclaré !");
-            DetruireHabitat(habitat, habitatsDuZoo);
+            DetruireHabitat(habitat, zoo);
         }
         else
         {
             Console.WriteLine("Pas d'incendie cette fois.");
         }
     }
-    private void DetruireHabitat(Habitat habitat, List<Habitat> habitatsDuZoo)
+    private void DetruireHabitat(Habitat habitat, Zoo zoo)
     {
-        habitat.Animaux.Clear(); // Tous les animaux de l'habitat sont perdus
-        bool supprime = habitatsDuZoo.Remove(habitat);
+        habitat.ViderAnimaux(); // Tous les animaux de l'habitat sont perdus
+        bool supprime = zoo.SupprimerHabitat(habitat);
         if (supprime)
         {
             Console.WriteLine($"L'habitat n°'{habitat.Id}' a été détruit par l'incendie, et tous les animaux qu'il contenait ont été perdus.");
@@ -74,11 +74,9 @@ class Vol : Event
         if (CalculerImpact() == 1)
         {
             Console.WriteLine("Un vol s'est produit !");
-            if (habitat.Animaux.Count > 0)
+            Animal? animalVole = habitat.RetirerAnimalAleatoire(_random);
+            if (animalVole != null)
             {
-                int index = _random.Next(habitat.Animaux.Count);
-                Animal animalVole = habitat.Animaux[index];
-                habitat.Animaux.RemoveAt(index);
                 Console.WriteLine($"L'animal '{animalVole.Nom}' a été volé de l'habitat n°'{habitat.Id}'.");
             }
             else

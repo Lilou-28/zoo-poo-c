@@ -52,6 +52,12 @@ class Tour
         }
 
         Zoo.NourrirAnimauxTour();
+
+        Zoo._marchand.supprimerAnimauxAVendre();
+        Zoo._marchand.supprimerHabitatsAVendre();
+
+        Zoo._marchand.InitialiserAnimauxAVendre();
+        Zoo._marchand.InitialiserHabitatsAVendre();
         
         foreach (var habitatDuZoo in Zoo.HabitatsZoo)
         {

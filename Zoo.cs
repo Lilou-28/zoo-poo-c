@@ -7,7 +7,7 @@ class Zoo
     {
         get { return _habitatsZoo; }
     }
-    private Marchand _marchand;
+    public Marchand _marchand;
 
     private Bank _bank;
 

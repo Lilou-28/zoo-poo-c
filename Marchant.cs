@@ -26,6 +26,14 @@ class Marchand
         AjouterAiglesParAge(agesEnMois);
         AjouterPoulesParAge(agesEnMois);
     }
+    public void supprimerAnimauxAVendre()
+    {
+        AnimalsAVendre.RemoveAll(a => a is Tigre || a is Aigle || a is Poule);
+    }
+    public void supprimerHabitatsAVendre()
+    {
+        HabitatAVendre.RemoveAll(h => h.Type == "Tigre" || h.Type == "Aigle" || h.Type == "Poule");
+    }
 
     public void InitialiserHabitatsAVendre()
     {
@@ -76,7 +84,7 @@ class Marchand
     {
         foreach (int age in agesEnMois)
         {
-            for (int i = 1; i <= 3; i++)
+            for (int i = 1; i <= 2; i++)
             {
                 AnimalsAVendre.Add(new Tigre($"Tigre_{age}m_{i}", age));
             }
@@ -87,7 +95,7 @@ class Marchand
     {
         foreach (int age in agesEnMois)
         {
-            for (int i = 1; i <= 3; i++)
+            for (int i = 1; i <= 2; i++)
             {
                 AnimalsAVendre.Add(new Aigle($"Aigle_{age}m_{i}", age));
             }
@@ -97,7 +105,7 @@ class Marchand
     {
         foreach (int age in agesEnMois)
         {
-            for (int i = 1; i <= 3; i++)
+            for (int i = 1; i <= 2; i++)
             {
                 AnimalsAVendre.Add(new Poule($"Poule_{age}m_{i}", age));
             }

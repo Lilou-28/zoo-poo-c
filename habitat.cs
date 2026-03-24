@@ -42,7 +42,7 @@ class Habitat
         Id = ++_compteur_id;
         Console.Write("Entrez le nom de l'habitat :");
         _Nom = Console.ReadLine() ?? "Habitat";
-        NourritureHabitat = new Aliment();
+        NourritureHabitat = new Graines();
         _animaux = new List<Animal>();
 
     }
@@ -51,7 +51,7 @@ class Habitat
     {
         Id = ++_compteur_id;
         _Nom = string.IsNullOrWhiteSpace(nom) ? "Habitat" : nom.Trim();
-        NourritureHabitat = new Aliment();
+        NourritureHabitat = new Graines();
         _animaux = new List<Animal>();
     }
     public void AjouterAnimal(Animal animal)
@@ -148,8 +148,8 @@ class Hab_Tigre : Habitat
         Type = "Tigre";
         prix_achat = 2000;
         prix_vente = 500;
-        NourritureHabitat = new Aliment(); 
-        NourritureHabitat.limite = 400;
+        NourritureHabitat = new Viande(); 
+        NourritureHabitat.Limite = 2160;
     }
 }
 
@@ -161,8 +161,8 @@ class Hab_Aigle : Habitat
         Type = "Aigle";
         prix_achat = 2000;
         prix_vente = 500;
-        NourritureHabitat = new Aliment();
-        NourritureHabitat.limite = 400;  
+        NourritureHabitat = new Viande();
+        NourritureHabitat.Limite = 135;
     }
 }
 
@@ -174,7 +174,7 @@ class Hab_poule : Habitat
         Type = "Poule";
         prix_achat = 300;
         prix_vente = 50;
-        NourritureHabitat = new Aliment();
-        NourritureHabitat.limite = 200;
+        NourritureHabitat = new Graines();
+        NourritureHabitat.Limite = 180;
     }
 }

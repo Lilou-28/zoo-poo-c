@@ -28,7 +28,7 @@ class Zoo
         _nom = string.IsNullOrWhiteSpace(nomSaisi) ? "Mon Zoo" : nomSaisi.Trim();
         _habitatsZoo = new List<Habitat>(); 
         _bank = new Bank();
-        StockNourritureGraines = new Graine();
+        StockNourritureGraines = new Graines();
         StockNourritureViande = new Viande();
         _marchand = new Marchand(_bank);
         _marchand.InitialiserAnimauxAVendre();
@@ -81,6 +81,41 @@ class Zoo
     public bool SupprimerHabitat(Habitat habitat)
     {
         return _habitatsZoo.Remove(habitat);
+    }
+
+    public void NourrirAnimauxTour()
+    {
+        if (_habitatsZoo.Count == 0)
+        {
+            Console.WriteLine("Aucun habitat: pas de nourrissage ce tour.");
+            return;
+        }
+
+        int totalAnimaux = 0;
+        int nourrisComplet = 0;
+        int encoreAffames = 0;
+
+        Console.WriteLine("\nNourrissage automatique du tour:");
+        foreach (Habitat habitat in _habitatsZoo)
+        {
+            foreach (Animal animal in habitat.Animaux)
+            {
+                totalAnimaux++;
+                bool repu = animal.Nourrir(habitat.NourritureHabitat, habitat, out string message);
+                if (repu)
+                {
+                    nourrisComplet++;
+                }
+                else
+                {
+                    encoreAffames++;
+                }
+
+                Console.WriteLine($"- {message}");
+            }
+        }
+
+        Console.WriteLine($"Resume nourrissage: {nourrisComplet}/{totalAnimaux} repus, {encoreAffames} encore affames.");
     }
     
     private void AfficherToursSuivants()
@@ -472,15 +507,15 @@ class Zoo
         Console.WriteLine("\n---Infos---");
         Console.WriteLine($"- Nom de ton Zoo : {_nom}");
         Console.WriteLine($"- {_bank.AfficherSolde()}");
-        Console.WriteLine("- Stock de nourriture : " + StockNourritureGraines.stockcourrant + "/" + StockNourritureGraines.limite);
-        Console.WriteLine("- Stock de viande : " + StockNourritureViande.stockcourrant + "/" + StockNourritureViande.limite);
+        Console.WriteLine("- Stock de graines : " + StockNourritureGraines.StockCourant + "/" + StockNourritureGraines.Limite);
+        Console.WriteLine("- Stock de viande : " + StockNourritureViande.StockCourant + "/" + StockNourritureViande.Limite);
         Console.WriteLine("\nAppuyez sur Entrée pour revenir au menu...");
         Console.ReadLine();
     }
     private void AfficherMenuNourriture(Habitat habitat)
     {
         Console.Clear();
-        Console.WriteLine($"Nourriture a disposition : {habitat.NourritureHabitat.stockcourrant}/{habitat.NourritureHabitat.limite}");
+        Console.WriteLine($"Nourriture a disposition : {habitat.NourritureHabitat.StockCourant}/{habitat.NourritureHabitat.Limite}");
         Console.WriteLine("1. Ajouter de la nourriture");
         Console.WriteLine("2. Retirer de la nourriture");
         Console.WriteLine("0. Retour"); 
@@ -491,33 +526,67 @@ class Zoo
         switch (choix)
         {
             case "1":
+                Console.WriteLine($"Stock de graines disponible : {StockNourritureGraines.StockCourant}/{StockNourritureGraines.Limite}");
+                Console.WriteLine($"Stock de viande disponible : {StockNourritureViande.StockCourant}/{StockNourritureViande.Limite}");
                 Console.Write("Quantite a ajouter : ");
                 if (int.TryParse(Console.ReadLine(), out int quantiteAjout))
                 {
-                    if (quantiteAjout > 0)
+                    if (habitat.NourritureHabitat is Viande)
                     {
-                        habitat.NourritureHabitat.AjouterAliment(quantiteAjout);
-                        Console.WriteLine("Nourriture ajoutee avec succes.");
+                        if (quantiteAjout > 0 && (quantiteAjout + habitat.NourritureHabitat.StockCourant) <= habitat.NourritureHabitat.Limite && quantiteAjout <= StockNourritureViande.StockCourant)
+                        {
+                            habitat.NourritureHabitat.AjouterAliment(quantiteAjout);
+                            StockNourritureViande.SupprimerAliment(quantiteAjout);
+                            Console.WriteLine("Viande ajoutee avec succes.");
+                            TemporisationCourte();
+                        }
+                        else
+                        {
+                            Console.WriteLine("La quantite doit etre positive et ne peut pas depasser le stock disponible.");
+                            TemporisationCourte();
+                        }
                     }
-                    else
+                    else if (habitat.NourritureHabitat is Graines)
                     {
-                        Console.WriteLine("La quantite doit etre positive.");
+                        if (quantiteAjout > 0 && (quantiteAjout + habitat.NourritureHabitat.StockCourant) <= habitat.NourritureHabitat.Limite && quantiteAjout <= StockNourritureGraines.StockCourant)
+                        {
+                            habitat.NourritureHabitat.AjouterAliment(quantiteAjout);
+                            StockNourritureGraines.SupprimerAliment(quantiteAjout);
+                            Console.WriteLine("Graines ajoutees avec succes.");
+                            TemporisationCourte();
+                        }
+                        else
+                        {
+                            Console.WriteLine("La quantite doit etre positive et ne peut pas depasser le stock disponible.");
+                            TemporisationCourte();
+                        }
                     }
                 }
                 break;
 
             case "2":
+                Console.WriteLine($"Stock de nourriture dans l'habitat : {habitat.NourritureHabitat.StockCourant}/{habitat.NourritureHabitat.Limite}");
                 Console.Write("Quantite a retirer : ");
                 if (int.TryParse(Console.ReadLine(), out int quantiteRetirer))
                 {
-                    if (quantiteRetirer > 0)
+                    if (quantiteRetirer > 0 && quantiteRetirer <= habitat.NourritureHabitat.StockCourant && (habitat.NourritureHabitat.StockCourant - quantiteRetirer) >= 0)
                     {
                         habitat.NourritureHabitat.SupprimerAliment(quantiteRetirer);
+                        if (habitat.NourritureHabitat is Viande)
+                        {
+                            StockNourritureViande.AjouterAliment(quantiteRetirer);
+                        }
+                        else if (habitat.NourritureHabitat is Graines)
+                        {
+                            StockNourritureGraines.AjouterAliment(quantiteRetirer);
+                        }
                         Console.WriteLine("Nourriture retiree avec succes.");
+                        TemporisationCourte();
                     }
                     else
                     {
-                        Console.WriteLine("La quantite doit etre positive.");
+                        Console.WriteLine("La quantite doit etre positive et ne peut pas depasser le stock disponible.");
+                        TemporisationCourte();
                     }
                 }
                 break;
@@ -529,14 +598,15 @@ class Zoo
                 break;
         }
     }
+
     private void AcheterNourritureMenu()
     {
         Console.Clear();
-        double prixGraines = new Graine().prix_kg;
-        double prixViande = new Viande().prix_kg;
+        double prixGraines = new Graines().PrixKg;
+        double prixViande = new Viande().PrixKg;
         Console.WriteLine("\n--- Acheter de la nourriture ---");
-        Console.WriteLine($"Stock actuel de graines : {StockNourritureGraines.stockcourrant}/{StockNourritureGraines.limite}");
-        Console.WriteLine($"Stock actuel de viande : {StockNourritureViande.stockcourrant}/{StockNourritureViande.limite}");
+        Console.WriteLine($"Stock actuel de graines : {StockNourritureGraines.StockCourant}/{StockNourritureGraines.Limite}");
+        Console.WriteLine($"Stock actuel de viande : {StockNourritureViande.StockCourant}/{StockNourritureViande.Limite}");
         Console.WriteLine($"1. Acheter des graines ({prixGraines}€ le kg)");
         Console.WriteLine($"2. Acheter de la viande ({prixViande}€ le kg)");
         Console.WriteLine("0. Retour");
@@ -553,6 +623,7 @@ class Zoo
                     if (quantiteGraines <= 0)
                     {
                         Console.WriteLine("La quantite doit etre positive.");
+                        TemporisationCourte();
                         break;
                     }
 
@@ -563,10 +634,12 @@ class Zoo
                     {
                         StockNourritureGraines.AjouterAliment(quantiteGraines);
                         Console.WriteLine("Graines achetees avec succes.");
+                        TemporisationCourte();
                     }
                     else
                     {
                         Console.WriteLine("Solde insuffisant pour cet achat.");
+                        TemporisationCourte();
                     }
                 }
                 break;
@@ -578,6 +651,7 @@ class Zoo
                     if (quantiteViande <= 0)
                     {
                         Console.WriteLine("La quantite doit etre positive.");
+                        TemporisationCourte();
                         break;
                     }
 
@@ -588,10 +662,12 @@ class Zoo
                     {
                         StockNourritureViande.AjouterAliment(quantiteViande);
                         Console.WriteLine("Viande achetee avec succes.");
+                        TemporisationCourte();
                     }
                     else
                     {
                         Console.WriteLine("Solde insuffisant pour cet achat.");
+                        TemporisationCourte();
                     }
                 }
                 break;

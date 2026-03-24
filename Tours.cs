@@ -50,6 +50,8 @@ class Tour
         {
             Console.WriteLine("Pas de mauvais évènement ce mois-ci !");
         }
+
+        Zoo.NourrirAnimauxTour();
         
         foreach (var habitatDuZoo in Zoo.HabitatsZoo)
         {

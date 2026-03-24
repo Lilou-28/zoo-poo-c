@@ -40,8 +40,11 @@ class Animal
 
     protected int _mort;
 
+    protected string _type_nourriture = "";
 
-    public Animal()
+    protected int _nouriture_consommee_mois;
+
+    protected Animal()
     {
         Id = ++_compteur_id; 
         Console.Write("Entrez le nom de l'animal :");
@@ -49,11 +52,74 @@ class Animal
         _age = 0;
     }
 
-    public Animal(string nom, int age)
+    protected Animal(string nom, int age)
     {
         Id = ++_compteur_id;
         _Nom = string.IsNullOrWhiteSpace(nom) ? "Animal" : nom.Trim();
         _age = Math.Max(0, age);
+    }
+
+    public int QuantiteNourritureNecessaire
+    {
+        get { return (int)Math.Ceiling(_poids_nouriture); }
+    }
+
+    private string TypeAliment(Aliment aliment)
+    {
+        if (aliment is Viande)
+        {
+            return "Viande";
+        }
+
+        if (aliment is Graines)
+        {
+            return "Graines";
+        }
+
+        return "";
+    }
+
+    public bool Nourrir(Aliment aliment, Habitat habitat, out string message)
+    {
+
+        string typeNourritureHabitat = TypeAliment(habitat.NourritureHabitat);
+        if (_type_nourriture != typeNourritureHabitat)
+        {
+            _faim = true;
+            message = $"Type de nourriture incompatible: {Nom} mange {_type_nourriture} mais l'habitat fournit {typeNourritureHabitat}.";
+            return false;
+        }
+
+        int quantiteNecessaire = QuantiteNourritureNecessaire;
+        int quantiteDisponible = aliment.StockCourant;
+
+        if (quantiteDisponible <= 0)
+        {
+            _faim = true;
+            message = $"Aucun stock disponible pour nourrir {Nom}.";
+            return false;
+        }
+
+        int quantiteMangee = Math.Min(quantiteNecessaire, quantiteDisponible);
+        if (!aliment.SupprimerAliment(quantiteMangee))
+        {
+            _faim = true;
+            message = $"Impossible de retirer {quantiteMangee} de nourriture pour {Nom}.";
+            return false;
+        }
+
+        _nouriture_consommee_mois += quantiteMangee;
+
+        if (quantiteMangee < quantiteNecessaire)
+        {
+            _faim = true;
+            message = $"{Nom} a mange {quantiteMangee} kg sur {quantiteNecessaire} kg et a encore faim.";
+            return false;
+        }
+
+        _faim = false;
+        message = $"{Nom} a ete nourri avec succes ({quantiteMangee} kg).";
+        return true;
     }
 
     public string Aleatoiresexe()
@@ -137,14 +203,15 @@ class Poule : Animal {
         _sexe = Aleatoiresexe();
             if (_sexe == "Male")
         {
-            _poids_nouriture = 0.18;
+            _poids_nouriture = 0.18 * 30;
             _majoriter = 6;
         }
         else
         {
-            _poids_nouriture = 0.15;
+            _poids_nouriture = 0.15 * 30;
             _majoriter = 6;
         }
+        _type_nourriture = "Graines";
         _fin_production = 96; 
         _mort = 180; 
         _faim = false; 
@@ -155,18 +222,19 @@ class Poule : Animal {
         _sexe = Aleatoiresexe();
         if (_sexe == "Male")
         {
-            _poids_nouriture = 0.18;
+            _poids_nouriture = 0.18 * 30;
             _majoriter = 6;
             _prix_vente = 20;
             _prix_achat = 100;
         }
         else
         {
-            _poids_nouriture = 0.15;
+            _poids_nouriture = 0.15 * 30;
             _majoriter = 6;
             _prix_vente = 10;
             _prix_achat = 20;
         }
+        _type_nourriture = "Graines";
         _fin_production = 96;
         _mort = 180;
         _faim = false;
@@ -189,15 +257,16 @@ class Tigre : Animal
         _sexe = Aleatoiresexe();
         if (_sexe == "Male")
         {
-            _poids_nouriture = 12;
+            _poids_nouriture = 12 * 30;
             _majoriter = 48;
         }
         else
         {
-            _poids_nouriture = 10;
+            _poids_nouriture = 10 * 30;
             _majoriter = 72;
             
         }
+        _type_nourriture = "Viande";
         _prix_achat = 3000;
         _prix_vente = 1500;
         _fin_production = 14;
@@ -210,14 +279,15 @@ class Tigre : Animal
         _sexe = Aleatoiresexe();
         if (_sexe == "Male")
         {
-            _poids_nouriture = 12;
+            _poids_nouriture = 12 * 30;
             _majoriter = 48;
         }
         else
         {
-            _poids_nouriture = 10;
+            _poids_nouriture = 10 * 30;
             _majoriter = 72;
         }
+        _type_nourriture = "Viande";
         _prix_achat = 3000;
         _prix_vente = 1500;
         _fin_production = 14;
@@ -252,12 +322,13 @@ class Aigle : Animal
         _sexe = Aleatoiresexe();
         if (_sexe == "Male")
         {
-            _poids_nouriture = 0.25;
+            _poids_nouriture = 0.25 * 30;
         }
         else
         {
-            _poids_nouriture = 0.3;
+            _poids_nouriture = 0.3 * 30;
         }
+        _type_nourriture = "Viande";
         _prix_achat = 1000; 
         _prix_vente = 500;
         _majoriter = 48;
@@ -271,12 +342,13 @@ class Aigle : Animal
         _sexe = Aleatoiresexe();
         if (_sexe == "Male")
         {
-            _poids_nouriture = 0.25;
+            _poids_nouriture = 0.25 * 30;
         }
         else
         {
-            _poids_nouriture = 0.3;
+            _poids_nouriture = 0.3 * 30;
         }
+        _type_nourriture = "Viande";
         _prix_achat = 1000;
         _prix_vente = 500;
         _majoriter = 48;

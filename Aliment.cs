@@ -1,88 +1,72 @@
-public class Aliment
+public abstract class Aliment
 {
-    public double prix_kg
+    private double _prixKg;
+    private int _limite;
+    private int _stockCourant;
+
+    public double PrixKg
     {
-        get
-        {
-            return _prix_kg;
-        }
-        set
-        {
-            _prix_kg = value;
-        }
+        get => _prixKg;
+        set => _prixKg = value >= 0 ? value : 0;
     }
 
-    public int limite
+    public int Limite
     {
-        get
-        {
-            return _limite;
-        }
-        set
-        {
-            _limite = value;
-        }
+        get => _limite;
+        set => _limite = value >= 0 ? value : 0;
     }
 
-    public int stockcourrant
+    public int StockCourant
     {
-        get
-        {
-            return _stockcourrant;
-        }
-        set
-        {
-            _stockcourrant = value;
-        }
+        get => _stockCourant;
+        set => _stockCourant = value >= 0 ? value : 0;
     }
 
-    int _stockcourrant;
-
-    int _limite ;
-
-    double _prix_kg ;
-
-    public Aliment()
+    protected Aliment(int limite)
     {
+        Limite = limite;
+        StockCourant = 0;
     }
 
-    public Aliment(int limite)
+    public bool AjouterAliment(int quantite)
     {
-        this.limite = limite;
-    }
-
-    public void AjouterAliment(int valeurchoisie)
-    {
-        if ((valeurchoisie + stockcourrant) <= limite)
+        if (quantite <= 0)
+            return false;
+        
+        if ((quantite + StockCourant) <= Limite)
         {
-            stockcourrant = stockcourrant + valeurchoisie;
+            StockCourant += quantite;
+            return true;
         }
+        return false;
     }
 
-    public void SupprimerAliment(int valeurchoisie)
+    public bool SupprimerAliment(int quantite)
     {
-        if (valeurchoisie <= stockcourrant)
+        if (quantite <= 0)
+            return false;
+        
+        if (quantite <= StockCourant)
         {
-            stockcourrant = stockcourrant - valeurchoisie;
+            StockCourant -= quantite;
+            return true;
         }
+        return false;
     }
 }
 
 public class Viande : Aliment
 {
-    public Viande(){
-        prix_kg = 5;
-        limite = 4500;
-        stockcourrant = 0;
+    public Viande() : base(2295)
+    {
+        PrixKg = 5;
     }
 }
 
-public class Graine : Aliment
+public class Graines : Aliment
 {
-    public Graine()
+    public Graines() : base(180)
     {
-        prix_kg = 2.5;
-        limite = 500;
-        stockcourrant = 0;
+        PrixKg = 2.5;
     }
 }

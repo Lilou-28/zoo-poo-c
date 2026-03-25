@@ -37,7 +37,7 @@ class Zoo
         _marchand.InitialiserHabitatsAVendre();
         _tours = new Tour(this);
 
-        _notificationSubvention = "Bienvenue ! Investissez dans des espèces protégées (Aigle, Tigre) pour obtenir des subventions chaque début d'année (Janvier).";
+        _notificationSubvention = "Bienvenue ! La possession d'espèces protégées (Aigle, Tigre) entraîne le paiement d'une taxe de préservation chaque début d'année (Janvier).";
     }
 
     public void AfficherMenu()
@@ -108,7 +108,7 @@ class Zoo
     {
         if (_tours.nbTours % 12 == 1)
         {
-            int subventionTotale = 0;
+            int taxeTotale = 0;
             int nbAigles = 0;
             int nbTigres = 0;
 
@@ -118,26 +118,25 @@ class Zoo
                 {
                     if (animal is Aigle)
                     {
-                        subventionTotale += 2190;
+                        taxeTotale += 2190;
                         nbAigles++;
                     }
                     else if (animal is Tigre)
                     {
-                        subventionTotale += 43800;
+                        taxeTotale += 43800;
                         nbTigres++;
                     }
                 }
             }
 
-            if (subventionTotale > 0)
+            if (taxeTotale > 0)
             {
-                _bank.AjouterArgent(subventionTotale);
-                Console.WriteLine("\n--- Subventions Annuelles ---");
+                Console.WriteLine("\n--- Taxe Annuelle de Préservation ---");
                 Console.WriteLine($"Espèces protégées recensées : {nbAigles} Aigle(s), {nbTigres} Tigre(s).");
-                Console.WriteLine($"Subvention de {subventionTotale} versée pour la préservation des espèces !");
+                Console.WriteLine($"Une taxe de {taxeTotale} va être prélevée pour la préservation des espèces.");
+                _bank.RetirerArgent(taxeTotale);
                 Console.WriteLine(_bank.AfficherSolde());
-
-                _notificationSubvention = $"Vous avez reçu {subventionTotale} de subvention pour vos espèces protégées.";
+                _notificationSubvention = $"Une taxe de {taxeTotale} a été prélevée pour vos espèces protégées.";
             }
         }
     }

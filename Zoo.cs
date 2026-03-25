@@ -16,6 +16,8 @@ class Zoo
     private Aliment StockNourritureGraines;
     private Aliment StockNourritureViande;
 
+    private string _notificationSubvention = "";
+
     private static void TemporisationCourte()
     {
         Thread.Sleep(1500);
@@ -34,6 +36,8 @@ class Zoo
         _marchand.InitialiserAnimauxAVendre();
         _marchand.InitialiserHabitatsAVendre();
         _tours = new Tour(this);
+
+        _notificationSubvention = "Bienvenue ! La possession d'espèces protégées (Aigle, Tigre) entraîne le paiement d'une taxe de préservation chaque début d'année (Janvier).";
     }
 
     public void AfficherMenu()
@@ -44,6 +48,11 @@ class Zoo
         {
             Console.Clear();
             Console.WriteLine("\n--- Menu Zoo ---");
+            if (!string.IsNullOrEmpty(_notificationSubvention))
+            {
+                Console.WriteLine($"*** NOTIFICATION : {_notificationSubvention} ***\n");
+                _notificationSubvention = "";
+            }
             Console.WriteLine("1. Menu marchand");
             Console.WriteLine("2. Voir mes habitats");
             Console.WriteLine("3. Mon Zoo");
@@ -124,9 +133,47 @@ class Zoo
         _tours.ProchainTour();
         Visiteur visiteurs = new Visiteur();
         visiteurs.VerifRevenu(_tours, _habitatsZoo, _bank);
+        AppliquerSubventionsAnnuelles();
         Console.WriteLine("Les animaux vieillissent, et de nouveaux événements peuvent survenir...");
         Console.WriteLine("\nAppuyez sur Entrée pour continuer...");
         Console.ReadLine();
+    }
+
+    private void AppliquerSubventionsAnnuelles()
+    {
+        if (_tours.nbTours % 12 == 1)
+        {
+            int taxeTotale = 0;
+            int nbAigles = 0;
+            int nbTigres = 0;
+
+            foreach (var habitat in _habitatsZoo)
+            {
+                foreach (var animal in habitat.Animaux)
+                {
+                    if (animal is Aigle)
+                    {
+                        taxeTotale += 2190;
+                        nbAigles++;
+                    }
+                    else if (animal is Tigre)
+                    {
+                        taxeTotale += 43800;
+                        nbTigres++;
+                    }
+                }
+            }
+
+            if (taxeTotale > 0)
+            {
+                Console.WriteLine("\n--- Taxe Annuelle de Préservation ---");
+                Console.WriteLine($"Espèces protégées recensées : {nbAigles} Aigle(s), {nbTigres} Tigre(s).");
+                Console.WriteLine($"Une taxe de {taxeTotale} va être prélevée pour la préservation des espèces.");
+                _bank.RetirerArgent(taxeTotale);
+                Console.WriteLine(_bank.AfficherSolde());
+                _notificationSubvention = $"Une taxe de {taxeTotale} a été prélevée pour vos espèces protégées.";
+            }
+        }
     }
     private void AfficherMenuMarchand()
     {

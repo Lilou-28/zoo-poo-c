@@ -1,7 +1,7 @@
 class Bank
 {
     private int Solde;
-    private string monnaie; 
+    public string monnaie { get; }
 
     public Bank()
     {

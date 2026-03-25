@@ -3,12 +3,19 @@ class Tour
     public int nbTours { get; private set; }
     public Zoo Zoo { get; }
     private static readonly Random _random = new Random();
+    private readonly List<Maladie> _maladies;
     private string mois = "";
     public bool saison_haute { get; private set; }
     public Tour(Zoo zoo)
     {
         Zoo = zoo;
         nbTours = 0;
+        _maladies = new List<Maladie>
+        {
+            new Mal_Tigre(),
+            new Mal_Aigle(),
+            new Mal_Poule()
+        };
     }
     public void ProchainTour()
     {
@@ -51,6 +58,9 @@ class Tour
             Console.WriteLine("Pas de mauvais évènement ce mois-ci !");
         }
 
+        MettreAJourMaladiesEnCours();
+        AppliquerMaladiesMensuelles();
+
         Zoo.NourrirAnimauxTour();
 
         Zoo._marchand.supprimerAnimauxAVendre();
@@ -63,8 +73,58 @@ class Tour
         {
             habitatDuZoo.FaireVieillirAnimaux();
         }
-        
+        foreach (var habitatDuZoo in Zoo.HabitatsZoo)
+        {
+            habitatDuZoo.Surpopulation();
+        }
     }
+
+    private void AppliquerMaladiesMensuelles()
+    {
+        foreach (Habitat habitat in Zoo.HabitatsZoo)
+        {
+            foreach (Animal animal in habitat.Animaux.ToList())
+            {
+                Maladie? maladie = TrouverMaladiePourAnimal(animal);
+                if (maladie != null)
+                {
+                    maladie.TenterInfection(animal, habitat, _random);
+                }
+            }
+        }
+    }
+
+    private void MettreAJourMaladiesEnCours()
+    {
+        foreach (Habitat habitat in Zoo.HabitatsZoo)
+        {
+            foreach (Animal animal in habitat.Animaux)
+            {
+                animal.ProgresserMaladie(1.0);
+            }
+        }
+    }
+
+    private Maladie? TrouverMaladiePourAnimal(Animal animal)
+    {
+        if (animal is Tigre)
+        {
+            return _maladies[0];
+        }
+
+        if (animal is Aigle)
+        {
+            return _maladies[1];
+        }
+
+        if (animal is Poule)
+        {
+            return _maladies[2];
+        }
+
+        return null;
+    }
+
     public void VerifierMois()
     {
         saison_haute = false;

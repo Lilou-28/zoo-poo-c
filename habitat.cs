@@ -1,3 +1,5 @@
+using System.Security.Cryptography.X509Certificates;
+
 class Habitat
 {
     public int Id { get; }
@@ -135,10 +137,34 @@ class Habitat
     {
         foreach (var animal in _animaux)
         {
-            animal.Vieillir();
+            animal.Vieillir(habitat: this);
         }
     }
 
+    public void Surpopulation()
+    {
+        if (_animaux.Count > Capacité)
+        {
+            
+            Random random = new Random();
+            if (random.NextDouble() < 0.5) // 50% de chance qu'un animal meure
+            {
+                int pertes = (this is Hab_poule) ? 4 : 1;
+
+                for (int i = 0; i < pertes; i++)
+                {
+                    Animal? animalMort = RetirerAnimalAleatoire(random);
+
+                    if (animalMort != null)
+                    {
+                        Console.WriteLine(
+                            $"L'animal '{animalMort.Nom}' est mort de surpopulation dans l'habitat '{_Nom}'."
+                        );
+                    }
+                }
+            }
+        }
+    }
 }
 class Hab_Tigre : Habitat
 {

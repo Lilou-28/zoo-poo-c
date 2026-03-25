@@ -44,6 +44,15 @@ class Animal
 
     protected int _nouriture_consommee_mois;
 
+    public bool _malade;
+    private double _moisMaladieRestants;
+    private string _maladieActive = "";
+
+    public bool EstMalade
+    {
+        get { return _malade; }
+    }
+
     protected Animal()
     {
         Id = ++_compteur_id; 
@@ -145,6 +154,32 @@ class Animal
         return true;
     }
 
+    public void TomberMalade(string nomMaladie, double dureeEnMois)
+    {
+        _malade = true;
+        _maladieActive = nomMaladie;
+        _moisMaladieRestants = Math.Max(0.1, dureeEnMois);
+    }
+
+    public void ProgresserMaladie(double moisEcoules)
+    {
+        if (!_malade)
+        {
+            return;
+        }
+
+        _moisMaladieRestants -= Math.Max(0.1, moisEcoules);
+        if (_moisMaladieRestants > 0)
+        {
+            return;
+        }
+
+        _malade = false;
+        _moisMaladieRestants = 0;
+        Console.WriteLine($"{Nom} est gueri de {_maladieActive}.");
+        _maladieActive = "";
+    }
+
     public bool ChangerNomAnimal()
     {
         Console.Write("Choisissez le nouveau nom de votre Animal :");
@@ -192,9 +227,14 @@ class Animal
                 return;
         }
     }
-    public void Vieillir()
+    public void Vieillir(Habitat habitat)
     {
         _age++;
+        if (Age >= _mort)
+        {
+            Console.WriteLine($"{Nom} est mort de vieillesse à l'âge de {Age} mois.");
+            habitat.RetirerAnimal(this);
+        }
     }
 }
 

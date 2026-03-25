@@ -9,10 +9,26 @@ class Visiteur
         prix_adulte = 17;
     }
 
-    public int CalculerVisiteursTotaux(List<Habitat> habitatsZoo)
+    public int CalculerVisiteursTotaux(List<Habitat> habitatsZoo, bool saison_haute)
     {
-        int visiteursTotaux = 0;
+        double visiteursTotaux = 0;
+        if (!saison_haute)
+        {
+            foreach (Habitat habitat in habitatsZoo)
+            {
+            double multiplicateurVisiteurs = habitat.Type switch
+            {
+                "Tigre" => 5,
+                "Aigle" => 0.5,
+                "Poule" => 7,
+                _ => 0
+            };
 
+            visiteursTotaux += habitat.Animaux.Count * multiplicateurVisiteurs;
+            }
+            
+            return (int)visiteursTotaux;
+        }
         foreach (Habitat habitat in habitatsZoo)
         {
             int multiplicateurVisiteurs = habitat.Type switch
@@ -26,12 +42,12 @@ class Visiteur
             visiteursTotaux += habitat.Animaux.Count * multiplicateurVisiteurs;
         }
 
-        return visiteursTotaux;
+        return (int)visiteursTotaux;
     }
 
     public int CalculerRevenuMensuel(List<Habitat> habitatsZoo)
     {
-        int visiteursTotaux = CalculerVisiteursTotaux(habitatsZoo);
+        int visiteursTotaux = CalculerVisiteursTotaux(habitatsZoo, true);
 
         // Groupes fixes : 2 adultes + 2 enfants.
         int groupesComplets = visiteursTotaux / 4;
@@ -42,26 +58,30 @@ class Visiteur
 
     public void VerifRevenu(Tour tours, List<Habitat> habitatsZoo, Bank bank)
     {
+        int visiteursTotaux = CalculerVisiteursTotaux(habitatsZoo, tours.saison_haute);
+        int revenu = CalculerRevenuMensuel(habitatsZoo);
+        int groupesComplets = visiteursTotaux / 4;
+
         if (!tours.saison_haute)
         {
-            Console.WriteLine("Hors saison haute : aucun revenu visiteurs ce tour.");
+            Console.WriteLine("Hors saison haute : moins de visiteurs et revenus réduits.");
+            Console.WriteLine($"Visiteurs: {visiteursTotaux}.");
+            Console.WriteLine($"Revenu visiteurs ajoute: {revenu}{bank.monnaie}.");
+            bank.AjouterArgent(revenu);
+            Console.WriteLine(bank.AfficherSolde());
             return;
         }
 
-        int visiteursTotaux = CalculerVisiteursTotaux(habitatsZoo);
         if (visiteursTotaux == 0)
         {
             Console.WriteLine("Aucun visiteur ce tour (pas d'animaux attractifs).");
             return;
         }
         
-        int revenu = CalculerRevenuMensuel(habitatsZoo);
-        int groupesComplets = visiteursTotaux / 4;
-
         bank.AjouterArgent(revenu);
 
         Console.WriteLine($"Visiteurs: {visiteursTotaux} ({groupesComplets} groupe(s) de 4)");
-        Console.WriteLine($"Revenu visiteurs ajoute: {revenu}.");
+        Console.WriteLine($"Revenu visiteurs ajoute: {revenu}{bank.monnaie}.");
         Console.WriteLine(bank.AfficherSolde());
     }
 }

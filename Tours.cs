@@ -35,7 +35,7 @@ class Tour
         Vol vol = new Vol();
         Nuisible nuisible = new Nuisible();
         ViandePourrie viandePourrie = new ViandePourrie();
-        int evenement = _random.Next(1, 6);
+        int evenement = _random.Next(1, 5);
 
         if (evenement == 1)
         {
@@ -49,7 +49,7 @@ class Tour
         {
             nuisible.AppliquerNuisible(habitat);
         }
-        else if (evenement == 5)
+        else if (evenement == 4)
         {
             viandePourrie.AppliquerViandePourrie(habitat);
         }

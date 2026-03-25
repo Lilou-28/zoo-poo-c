@@ -10,11 +10,6 @@ class Event
         this._probability = 0;
         this._description = "No description available";
     }
-
-    public override string ToString()
-    {
-        return $"{_name} - {_description} (Probability: {_probability}%)";
-    }
     public int CalculerImpact()
     {
         double chance = _random.NextDouble() * 100; // Génère un nombre entre 0 et 100

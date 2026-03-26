@@ -183,7 +183,8 @@ class Habitat
 
     public void VerifierGestations()
     {
-        foreach (var femelle in Animaux.Where(a => a.Sexe == "Femelle" && a.EnGestation))
+        var femellesEnGestation = Animaux.Where(a => a.Sexe == "Femelle" && a.EnGestation).ToList();
+        foreach (var femelle in femellesEnGestation)
         {
             femelle.VerifierGestation(this);
         }

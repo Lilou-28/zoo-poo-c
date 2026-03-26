@@ -1,7 +1,9 @@
-class Animal
+
+class Animal 
 {
+    public int MoisDepuisArrivee { get; private set; } = 0;
     public int Id {get; }
-    private static readonly Random _random = new Random();
+    protected static readonly Random _random = new Random();
 
     private static int _compteur_id = 0 ;
     private string _Nom;
@@ -52,6 +54,16 @@ class Animal
     {
         get { return _malade; }
     }
+    protected double gestation; 
+    protected int _fin_reproduction;
+    protected double TauxMortaliteInfantile;
+
+    protected bool fidele;
+
+    protected int porte;
+
+    public bool EnGestation;
+    protected int _moisGestationRestants = 0;
 
     protected Animal()
     {
@@ -100,12 +112,24 @@ class Animal
         }
 
         int quantiteNecessaire = QuantiteNourritureNecessaire;
+        // Si femelle en gestation, elle mange 2x plus
+        if (_sexe == "Femelle" && EnGestation)
+        {
+            quantiteNecessaire *= 2;
+        }
         int quantiteDisponible = aliment.StockCourant;
 
         if (quantiteDisponible <= 0)
         {
             _faim = true;
             message = $"Aucun stock disponible pour nourrir {Nom}.";
+            // Si femelle en gestation, elle perd le fœtus
+            if (_sexe == "Femelle" && EnGestation)
+            {
+                EnGestation = false;
+                _moisGestationRestants = 0;
+                message += " (Elle a perdu le fœtus par manque de nourriture)";
+            }
             return false;
         }
 
@@ -114,6 +138,13 @@ class Animal
         {
             _faim = true;
             message = $"Impossible de retirer {quantiteMangee} de nourriture pour {Nom}.";
+            // Si femelle en gestation, elle perd le fœtus
+            if (_sexe == "Femelle" && EnGestation)
+            {
+                EnGestation = false;
+                _moisGestationRestants = 0;
+                message += " (Elle a perdu le fœtus par manque de nourriture)";
+            }
             return false;
         }
 
@@ -123,6 +154,13 @@ class Animal
         {
             _faim = true;
             message = $"{Nom} a mange {quantiteMangee} kg sur {quantiteNecessaire} kg et a encore faim.";
+            // Si femelle en gestation, elle perd le fœtus
+            if (_sexe == "Femelle" && EnGestation)
+            {
+                EnGestation = false;
+                _moisGestationRestants = 0;
+                message += " (Elle a perdu le fœtus par manque de nourriture)";
+            }
             return false;
         }
 
@@ -140,6 +178,7 @@ class Animal
         }
         else
         {
+            
             return "Femelle"; 
         }
     }
@@ -230,18 +269,108 @@ class Animal
     public void Vieillir(Habitat habitat)
     {
         _age++;
+        MoisDepuisArrivee++;
         if (Age >= _mort)
         {
             Console.WriteLine($"{Nom} est mort de vieillesse à l'âge de {Age} mois.");
             habitat.RetirerAnimal(this);
         }
     }
+    public bool PeutSeReproduire()
+    {
+        // Un animal peut se reproduire s'il est mature, pas trop vieux, pas malade, pas affamé, et (si femelle) pas déjà en gestation
+        if (Age >= _majoriter && Age < _fin_reproduction && EstMalade == false && _faim == false && MoisDepuisArrivee > 0 && (_sexe == "Male" || EnGestation == false))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    // Système de reproduction
+    public virtual bool TenterReproduction(Animal partenaire, Habitat habitat)
+    {
+        // Vérifie que les deux animaux sont de la même espèce
+        if (this.GetType() != partenaire.GetType())
+        {
+            Console.WriteLine("Les animaux ne sont pas de la même espèce.");
+            return false;
+        }
+        // Vérifie que les sexes sont différents
+        if (this.Sexe == partenaire.Sexe)
+        {
+            Console.WriteLine("Les deux animaux sont du même sexe.");
+            return false;
+        }
+        // Trouve la femelle
+        Animal femelle = this.Sexe == "Femelle" ? this : partenaire;
+        Animal male = this.Sexe == "Male" ? this : partenaire;
+        // Vérifie que les deux peuvent se reproduire
+        if (!this.PeutSeReproduire() || !partenaire.PeutSeReproduire())
+        {
+            Console.WriteLine("Un des animaux ne peut pas se reproduire.");
+            return false;
+        }
+        // Vérifie que la femelle n'est pas déjà en gestation
+        if (femelle.EnGestation)
+        {
+            Console.WriteLine($"{femelle.Nom} est déjà en gestation.");
+            return false;
+        }
+        // Vérifie qu'il y a de la place pour les petits
+        int placesLibres = habitat.Capacité - habitat.Animaux.Count;
+        if (placesLibres <= 0)
+        {
+            Console.WriteLine("Pas assez de place dans l'habitat pour accueillir de nouveaux petits.");
+            return false;
+        }
+        // Lance la gestation
+        femelle.EnGestation = true;
+        femelle._moisGestationRestants = (int)Math.Ceiling(femelle.gestation);
+        Console.WriteLine($"Félicitations ! {femelle.Nom} attend des petits.");
+        return true;
+    }
+
+    public virtual Animal BebeCree()
+    {
+        throw new NotImplementedException("BebeCree doit être surchargée dans chaque espèce.");
+    }
+
+    public void VerifierGestation(Habitat habitat)
+    {
+        if (EnGestation == true)
+        {
+            _moisGestationRestants--;
+            if (_moisGestationRestants <= 0)
+            {
+                EnGestation = false;
+                MettreBas(habitat);
+            }
+        }
+    }
+    private void MettreBas(Habitat habitat)
+{
+    Console.WriteLine($"{Nom} met bas !");
+    for (int i = 0; i < porte; i++)
+    {
+        // Chance de survie basée sur TauxMortaliteInfantile
+        if (_random.NextDouble() > TauxMortaliteInfantile)
+        {
+            Animal bebe = BebeCree();
+            habitat.AjouterAnimal(bebe);
+            Console.WriteLine($"Un nouveau {bebe.GetType().Name} est né !");
+        }
+        else
+        {
+            Console.WriteLine("Hélas, un petit n'a pas survécu.");
+        }
+    }
+}
 }
 
 class Poule : Animal {
     public Poule (){
         _sexe = Aleatoiresexe();
-            if (_sexe == "Male")
+        if (_sexe == "Male")
         {
             _poids_nouriture = 0.18 * 30;
             _majoriter = 6;
@@ -250,11 +379,15 @@ class Poule : Animal {
         {
             _poids_nouriture = 0.15 * 30;
             _majoriter = 6;
+            gestation = 1.5; // 6 semaines ≈ 1.5 mois
+            porte = 2; // 2 œufs par ponte
+            TauxMortaliteInfantile = 0.5;
         }
         _type_nourriture = "Graines";
-        _fin_production = 96; 
-        _mort = 180; 
-        _faim = false; 
+        _fin_production = 96;
+        _fin_reproduction = 96;
+        _mort = 180;
+        _faim = false;
     }
 
     public Poule(string nom, int age) : base(nom, age)
@@ -273,11 +406,20 @@ class Poule : Animal {
             _majoriter = 6;
             _prix_vente = 10;
             _prix_achat = 20;
+            gestation = 1.5;
+            porte = 2;
+            TauxMortaliteInfantile = 0.5;
         }
         _type_nourriture = "Graines";
         _fin_production = 96;
+        _fin_reproduction = 96;
         _mort = 180;
         _faim = false;
+    }
+
+    public override Animal BebeCree()
+    {
+        return new Poule();
     }
 
     public override (int _prix_achat, int _prix_vente) Calculprix (){
@@ -304,13 +446,15 @@ class Tigre : Animal
         {
             _poids_nouriture = 10 * 30;
             _majoriter = 72;
-            
+            gestation = 3; // 3 mois
+            porte = _random.Next(1, 4); // 1 à 3 petits
+            TauxMortaliteInfantile = 0.33;
         }
         _type_nourriture = "Viande";
         _prix_achat = 3000;
         _prix_vente = 1500;
-        _fin_production = 14;
-        _mort = 25;
+        _fin_production = 14 * 12;
+        _mort = 25*12;
         _faim = false; 
     }
 
@@ -326,12 +470,15 @@ class Tigre : Animal
         {
             _poids_nouriture = 10 * 30;
             _majoriter = 72;
+            gestation = 3; 
+            porte = _random.Next(1, 4); 
+            TauxMortaliteInfantile = 0.33;
         }
         _type_nourriture = "Viande";
         _prix_achat = 3000;
         _prix_vente = 1500;
-        _fin_production = 14;
-        _mort = 25;
+        _fin_production = 168;
+        _mort = 300;
         _faim = false;
     }
     public override (int _prix_achat, int _prix_vente) Calculprix (){
@@ -353,6 +500,11 @@ class Tigre : Animal
 
         return (_prix_achat, _prix_vente);
     }
+    public override Animal BebeCree()
+    {
+        // On crée un bébé tigre de 0 mois
+        return new Tigre("Petit Tigre", 0);
+    }
 }
 
 class Aigle : Animal
@@ -363,18 +515,24 @@ class Aigle : Animal
         if (_sexe == "Male")
         {
             _poids_nouriture = 0.25 * 30;
+            _majoriter = 48;
         }
         else
         {
             _poids_nouriture = 0.3 * 30;
+            _majoriter = 48;
+            gestation = 1.5; // 45 jours ≈ 1.5 mois
+            porte = 1; // 1 petit par ponte
+            TauxMortaliteInfantile = 0.5;
         }
         _type_nourriture = "Viande";
-        _prix_achat = 1000; 
+        _prix_achat = 1000;
         _prix_vente = 500;
         _majoriter = 48;
-        _fin_production = 14; 
-        _mort = 25;
-        _faim = false; 
+        _fin_production = 168;
+        _fin_reproduction = 168;
+        _mort = 300;
+        _faim = false;
     }
 
     public Aigle(string nom, int age) : base(nom, age)
@@ -383,18 +541,29 @@ class Aigle : Animal
         if (_sexe == "Male")
         {
             _poids_nouriture = 0.25 * 30;
+            _majoriter = 48;
         }
         else
         {
             _poids_nouriture = 0.3 * 30;
+            _majoriter = 48;
+            gestation = 1.5;
+            porte = 1;
+            TauxMortaliteInfantile = 0.5;
         }
         _type_nourriture = "Viande";
         _prix_achat = 1000;
         _prix_vente = 500;
         _majoriter = 48;
-        _fin_production = 14;
-        _mort = 25;
+        _fin_production = 168;
+        _fin_reproduction = 168;
+        _mort = 300;
         _faim = false;
+    }
+
+    public override Animal BebeCree()
+    {
+        return new Aigle();
     }
     public override (int _prix_achat, int _prix_vente) Calculprix (){
         if (Age < 6){

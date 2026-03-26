@@ -135,9 +135,10 @@ class Habitat
 
     public void FaireVieillirAnimaux()
     {
+        var aRetirer = new List<Animal>();
         foreach (var animal in _animaux)
         {
-            animal.Vieillir(habitat: this);
+           animal.Vieillir(habitat: this);
         }
     }
 
@@ -165,6 +166,28 @@ class Habitat
             }
         }
     }
+    public void TentativeReproduction()
+    {
+        var males = Animaux.Where(a => a.Sexe == "Male" && a.PeutSeReproduire()).ToList();
+        var femelles = Animaux.Where(a => a.Sexe == "Femelle" && a.PeutSeReproduire() && !a.EnGestation).ToList();
+
+        foreach (var femelle in femelles)
+        {
+            if (males.Any())
+            {
+                var male = males[new Random().Next(males.Count)];
+                femelle.TenterReproduction(male, this);
+            }
+        }
+    }
+
+    public void VerifierGestations()
+    {
+        foreach (var femelle in Animaux.Where(a => a.Sexe == "Femelle" && a.EnGestation))
+        {
+            femelle.VerifierGestation(this);
+        }
+    }
 }
 class Hab_Tigre : Habitat
 {
@@ -183,7 +206,7 @@ class Hab_Aigle : Habitat
 {
     public Hab_Aigle() : base("Voliere Aigle")
     {
-        Capacité = 5;
+        Capacité = 4;
         Type = "Aigle";
         prix_achat = 2000;
         prix_vente = 500;

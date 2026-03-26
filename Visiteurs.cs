@@ -45,9 +45,9 @@ class Visiteur
         return (int)visiteursTotaux;
     }
 
-    public int CalculerRevenuMensuel(List<Habitat> habitatsZoo)
+    public int CalculerRevenuMensuel(List<Habitat> habitatsZoo, bool saison_haute)
     {
-        int visiteursTotaux = CalculerVisiteursTotaux(habitatsZoo, true);
+        int visiteursTotaux = CalculerVisiteursTotaux(habitatsZoo, saison_haute);
 
         // Groupes fixes : 2 adultes + 2 enfants.
         int groupesComplets = visiteursTotaux / 4;
@@ -59,7 +59,7 @@ class Visiteur
     public void VerifRevenu(Tour tours, List<Habitat> habitatsZoo, Bank bank)
     {
         int visiteursTotaux = CalculerVisiteursTotaux(habitatsZoo, tours.saison_haute);
-        int revenu = CalculerRevenuMensuel(habitatsZoo);
+        int revenu = CalculerRevenuMensuel(habitatsZoo, tours.saison_haute);
         int groupesComplets = visiteursTotaux / 4;
 
         if (!tours.saison_haute)

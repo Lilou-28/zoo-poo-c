@@ -99,9 +99,12 @@ class Nuisible : Event
         if (CalculerImpact() == 1)
         {
             Console.WriteLine("Une infestation de nuisibles s'est produite !");
-            //int grainesPerdues = (int)(habitat.Graines * 0.1); // Perte de 10% des graines
-            //habitat.Graines -= grainesPerdues;
-            //Console.WriteLine($"L'habitat n°'{habitat.Id}' a perdu {grainesPerdues} graines à cause des nuisibles.");
+            int grainesPerdues = (int)(habitat.NourritureHabitat.StockCourant * 0.1); // Perte de 10% des graines
+            if (grainesPerdues > 0)
+            {
+                habitat.NourritureHabitat.SupprimerAliment(grainesPerdues);
+            }
+            Console.WriteLine($"L'habitat n°'{habitat.Id}' a perdu {grainesPerdues} graines à cause des nuisibles.");
         }
         else
         {
@@ -123,9 +126,12 @@ class ViandePourrie : Event
         if (CalculerImpact() == 1)
         {
             Console.WriteLine("La viande a été contaminée !");
-            //int viandePerdue = (int)(habitat.Viande * 0.2); // Perte de 20% de la viande
-            //habitat.Viande -= viandePerdue;
-            //Console.WriteLine($"L'habitat n°'{habitat.Id}' a perdu {viandePerdue} unités de viande à cause de la contamination.");
+            int viandePerdue = (int)(habitat.NourritureHabitat.StockCourant * 0.2); // Perte de 20% de la viande
+            if (viandePerdue > 0)
+            {
+                habitat.NourritureHabitat.SupprimerAliment(viandePerdue);
+            }
+            Console.WriteLine($"L'habitat n°'{habitat.Id}' a perdu {viandePerdue} unités de viande à cause de la contamination.");
         }
         else
         {

@@ -117,3 +117,5 @@ Chaque année, un animal a une probabilité d'être malade (Mortalité +10%, Rep
 	```
 
 Suivre les instructions du menu pour gérer votre zoo.
+
+Lilou Rouquette et Enzo Andrianarivo

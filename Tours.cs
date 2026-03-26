@@ -75,6 +75,8 @@ class Tour
         }
         foreach (var habitatDuZoo in Zoo.HabitatsZoo)
         {
+            habitatDuZoo.VerifierGestations();
+            habitatDuZoo.TentativeReproduction();
             habitatDuZoo.Surpopulation();
         }
     }

@@ -1,107 +1,119 @@
 # zoo-poo-c
-Zoo Management Simulator (C# - Console)
-Description
 
-Ce projet est une simulation de gestion de zoo en ligne de commande. Vous incarnez le directeur d’un zoo et devez gérer :
+🦁 **README : Guide du Simulateur de Parc Animalier**
 
-Les animaux (achat, vente, reproduction, soins)
-Les habitats (achat, vente, capacité)
-L’alimentation et les budgets
-Les visiteurs et les revenus
-Les événements aléatoires et exceptionnels
+Ce document détaille les règles, statistiques et mécaniques économiques nécessaires à la gestion du parc. L'objectif est de maintenir l'équilibre entre le bien-être animal, la reproduction et la rentabilité financière.
 
-Le jeu se déroule mois par mois, avec des saisons, des probabilités de maladies, de naissance, de mortalité et de catastrophes.
+---
 
-Animaux
+## 🐾 1. Gestion des Animaux
 
-Chaque espèce est définie avec plusieurs caractéristiques :
+Le parc accueille trois espèces avec des besoins et des cycles de vie distincts.
 
-Espèce	Alimentation	Quantité/jour	Jours avant faim	Reproduction	Maturité sexuelle	Gestation	Fin de reproduction	Mortalité infantile	Espérance de vie	Remarques
-Tigre M	Viande	12 kg	2	–	6 ans	–	14 ans	–	25 ans	–
-Tigre F	Viande	10 kg	2	3 par portée / max 1 portée tous les 20 mois	4 ans	3 mois	14 ans	33%	25 ans	Femelle gestante mange 2x +, pas exposée au public
-Aigle M	Viande	0,25 kg	10	–	4 ans	–	14 ans	–	25 ans	Fidèle
-Aigle F	Viande	0,3 kg	10	2 œufs en mars	4 ans	45 jours	14 ans	50%	25 ans	Fidèle
-Poule	Graines	0,15 kg	1	200 œufs/an	6 mois	6 semaines	8 ans	50%	15 ans	–
-Coq	Graines	0,18 kg	2	–	6 mois	–	8 ans	–	15 ans	–
+### Alimentation et Coûts
 
-Les femelles ne se reproduisent pas si elles ont faim. Si elles sont en gestation et manquent de nourriture, elles perdent le foetus.
+**Carnivores** (Viande : 5€/kg)
+- Tigre Mâle : 12 kg/jour
+- Tigre Femelle : 10 kg/jour
+- Aigle Mâle : 0,25 kg/jour
+- Aigle Femelle : 0,3 kg/jour
 
-Nourriture
-Aliment	Prix / kg
-Viande	5 €
-Graines	2,5 €
-Achat / Vente d’animaux
-Animal	Prix achat	Prix vente
-Tigre 6 mois	3 000 €	1 500 €
-Tigre 4 ans	120 000 €	60 000 €
-Tigre 14 ans	60 000 €	10 000 €
-Poule 6 mois	20 €	10 €
-Coq 6 mois	100 €	20 €
-Aigle 6 mois	1 000 €	500 €
-Aigle 4 ans	4 000 €	2 000 €
-Aigle 14 ans	2 000 €	400 €
+**Granivores** (Graines : 2,5€/kg)
+- Poule : 0,15 kg/jour
+- Coq : 0,18 kg/jour
 
-Les animaux adultes ne se reproduisent pas le premier mois suivant leur arrivée.
+⚠️ **Règles Critiques :**
+- Les femelles en gestation consomment 2x plus de nourriture.
+- Un animal affamé ne se reproduit pas.
+- Une femelle affamée perd immédiatement son fœtus.
 
-Habitats
-Espèce	Prix achat	Prix vente	Capacité	Surpopulation	Probabilité maladie
-Tigre	2 000 €	    500 €	    2	         50% / mois	      20%
-Aigle	2 000 €	    500 €	    4	         50% / mois	      10%
-Poules	300 €	    50 €	    10	         50% / mois	      5%
+### Reproduction et Vie
 
-Les animaux ne se reproduisent pas s’ils n’ont pas accès à un habitat suffisant pour eux et leur futur jeune.
+| Espèce | Maturité Sexuelle | Gestation | Fin de Reprod. | Espérance de vie |
+|--------|-------------------|-----------|----------------|------------------|
+| Tigre  | 6 ans             | 3 mois    | 14 ans         | 25 ans           |
+| Aigle  | 4 ans             | 45 jours  | 14 ans         | 25 ans           |
+| Poule  | 6 mois            | 6 semaines| 8 ans          | 15 ans           |
 
-Maladies
-Taux de mortalité : 10%
-Durée ±20% selon l’animal
-| Espèce | Probabilité par an | Durée maladie    |
-|--------|--------------------|------------------|
-| Tigre  | 30%                | 15 jours         |
-| Aigle  | 10%                | 30 jours         |
-| Poule  | 5%                 | 5 jours          |
+Mortalité infantile :
+- Tigre (33%)
+- Aigle (50%)
+- Poule (50%)
 
-Les animaux malades ne peuvent pas se reproduire.
+Contraintes :
+- Pas de reproduction le 1er mois après l'achat
+- Pas de reproduction en cas de maladie ou de manque d'espace
 
-Visiteurs & Revenus
-Espèce	Saison haute	Saison basse
-Tigre	30 visiteurs / mois	5
-Poule	2	0,5
-Aigle	15	7
+---
 
-Saison haute : mai à septembre
-Tarif : adulte 17 €, enfant 13 €
-Topologie : 2 adultes + 2 enfants
+## 🏡 2. Habitats et Infrastructures
 
-Budget & Subventions
-Budget initial : 80 000 €
+Chaque espèce doit loger dans un habitat dédié. La surpopulation entraîne des pénalités sévères.
 
-Subvention annuelle :
-Tigre : 43 800 € par individu
-Aigle : 2 190 € par individu
+| Habitat       | Achat   | Vente  | Capacité   | Risque Surpopulation     |
+|---------------|---------|--------|------------|--------------------------|
+| Enclos Tigre  | 2 000 € | 500 €  | 2 tigres   | -1 individu / mois       |
+| Volière Aigle | 2 000 € | 500 €  | 4 aigles   | -1 individu / mois       |
+| Poulailler    | 300 €   | 50 €   | 10 poules  | -4 individus / mois      |
 
-Événements exceptionnels
-Type	Probabilité mensuelle	Effet
-Incendie	1%	Perte d’un habitat
-Vol	1%	Perte d’un spécimen
-Nuisibles	20%	Perte de 10% des graines
-Viande avariée	10%	Perte de 20% de la viande
+---
 
+## 💰 3. Économie du Parc
 
-Le jeu fonctionne par menu à choix numérotés :
+- **Budget Initial :** 80 000 €
 
-Acheter un animal
-Vendre un animal
-Acheter de la nourriture
-Acheter un habitat
-Vendre un habitat
-Passer au mois suivant
+### Subventions Annuelles (Aide d'État)
+- Tigre : 43 800 € / individu
+- Aigle : 2 190 € / individu
 
-Chaque action modifie le budget, la nourriture disponible, et peut déclencher des événements automatiques comme naissance, mortalité, maladie ou surpopulation.
+### Entrées Visiteurs
+- L'affluence varie selon la saison (Saison Haute : Mai à Septembre).
+- Tarif Adulte : 17 €
+- Tarif Enfant : 13 €
 
-Console de commande
+**Attractivité (Visiteurs/mois/spécimen) :**
+- Tigre : 30 (Haut) / 5 (Bas)
+- Aigle : 15 (Haut) / 7 (Bas)
+- Poule : 2 (Haut) / 0,5 (Bas)
 
-Lancer le projet (github Public)
-Cloner le dépôt : git clone https://github.com/Lilou-28/zoo-poo-c.git
-Compiler et exécuter : dotnet run
+---
+
+## 🏥 4. Santé et Aléas
+
+### Maladies
+Chaque année, un animal a une probabilité d'être malade (Mortalité +10%, Reprod. stoppée).
+- Tigre : 30% de probabilité (Dure 15 jours)
+- Aigle : 10% de probabilité (Dure 30 jours)
+- Poule : 5% de probabilité (Dure 5 jours)
+
+### Événements Exceptionnels (Mensuels)
+- Incendie (1%) : Perte de 1 habitat
+- Vol (1%) : Perte de 1 spécimen
+- Nuisibles (20%) : Perte de 10% du stock de graines
+- Viande avariée (10%) : Perte de 20% du stock de viande
+
+---
+
+## 🎮 5. Actions Possibles (Par tour)
+
+- Achat / Vente d'animaux : Gérer la population et le patrimoine
+- Achat de nourriture : Anticiper les besoins mensuels
+- Achat / Vente d'habitats : Éviter la surpopulation
+- Passer au tour suivant : Calcul automatique des naissances, décès et revenus
+
+---
+
+## Console de commande
+
+### Lancer le projet (github Public)
+
+1. Cloner le dépôt :
+	```
+	git clone https://github.com/Lilou-28/zoo-poo-c.git
+	```
+2. Compiler et exécuter :
+	```
+	dotnet run
+	```
 
 Suivre les instructions du menu pour gérer votre zoo.
